@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Navbar } from "../components/layout";
 import { StackSelector, FeatureToggle, ProjectInfoForm } from "../features/generator";
 
 export default function Generator() {
@@ -10,8 +9,7 @@ export default function Generator() {
 
   return (
     <>
-      <Navbar />
-      <div >
+      <div>
         {step === 1 && <StackSelector onNext={nextStep} />}
         {step === 2 && <FeatureToggle onNext={nextStep} onBack={prevStep} />}
         {step === 3 && <ProjectInfoForm onBack={prevStep} />}

@@ -1,31 +1,74 @@
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, Play } from 'lucide-react';
+import Squares from "../../../components/common/Squares";
+import TextType from "../../../components/common/TextType";
+import GenerateButton from "../../../components/common/GenerateButton";
+import ViewDemoButton from "../../../components/common/ViewDemoButton";
 
 export default function HeroSection() {
     const navigate = useNavigate();
+    const squaresHostRef = useRef(null);
+    const squaresCanvasRef = useRef(null);
+
+    useEffect(() => {
+        squaresCanvasRef.current = squaresHostRef.current?.querySelector("canvas") ?? null;
+    }, []);
+
+    const forwardMouseMoveToCanvas = (event) => {
+        const canvas = squaresCanvasRef.current;
+        if (!canvas) return;
+
+        canvas.dispatchEvent(
+            new MouseEvent("mousemove", {
+                bubbles: true,
+                clientX: event.clientX,
+                clientY: event.clientY,
+            })
+        );
+    };
+
+    const forwardMouseLeaveToCanvas = () => {
+        const canvas = squaresCanvasRef.current;
+        if (!canvas) return;
+
+        canvas.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+    };
 
     return (
-        <section className="relative z-10 px-6 pt-20">
-            <div className="max-w-7xl mx-auto">
-                <div className="text-center max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        Kickstart your Next App in Seconds
-                    </h1>
-                    <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-                        DevStarter lets developers instantly generate full-stack boilerplates with just one click.
-                        <br className="hidden md:block" />
-                        Save time. Skip the setup. Start building.
-                    </p>
+        <section
+            className="relative overflow-hidden py-20 min-h-[520px]"
+            onMouseMove={forwardMouseMoveToCanvas}
+            onMouseLeave={forwardMouseLeaveToCanvas}
+        >
+            <div ref={squaresHostRef} className="absolute inset-0 z-0 opacity-100">
+                <Squares
+                    direction="diagonal"
+                    speed={0.5}
+                    borderColor="rgba(255,255,255,0.22)"
+                    hoverFillColor="rgba(168,85,247,0.25)"
+                    squareSize={50}
+                />
+            </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                        <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center space-x-2" onClick={() => navigate("/generate")}>
-                            <Download className="w-5 h-5" />
-                            <span>Generate Boilerplate</span>
-                        </button>
-                        <button className="border border-gray-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-all flex items-center justify-center space-x-2">
-                            <Play className="w-5 h-5" />
-                            <span>View Demo</span>
-                        </button>
+            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-40">
+                <div className="text-center max-w-4xl mx-auto">
+                    <TextType
+                        as="div"
+                        text={["Kickstart Your Project in Seconds", "Generate full-stack boilerplates instantly.", "Skip setup. Start building."]}
+                        typingSpeed={75}
+                        initialDelay={0}
+                        deletingSpeed={50}
+                        loop={true}
+                        cursorCharacter="|"
+                        showCursor={true}
+                        cursorBlinkDuration={0.5}
+                        className="text-3xl md:text-6xl font-bold mb-6 bg-white bg-clip-text text-transparent leading-tight md:leading-[1.1] pb-2 min-h-[5rem] md:min-h-[9rem]"
+                    />
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 mb-12">
+                        <GenerateButton onClick={() => navigate("/generate")} />
+                        <ViewDemoButton onClick={() => window.open("https://devstarter-demo.vercel.app/", "_blank")} />
                     </div>
                 </div>
             </div>

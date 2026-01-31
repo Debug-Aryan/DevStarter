@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Navbar, Footer } from '../components/layout';
+import { Footer } from '../components/layout';
 import { DownloadCard, SuccessMessage, TipsToStart } from '../features/success';
 
 
@@ -13,7 +13,6 @@ export default function Success() {
 
   return (
     <>
-      <Navbar />
       <div className="min-h-screen bg-black text-white p-8">
         <div className="max-w-3xl mx-auto">
 

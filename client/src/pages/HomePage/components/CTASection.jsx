@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Zap } from 'lucide-react';
+import GenerateButton from "../../../components/common/GenerateButton";
 
 export default function CTASection() {
     const navigate = useNavigate();
@@ -12,10 +13,7 @@ export default function CTASection() {
                     <p className="text-xl text-gray-300 mb-8">
                         Join thousands of developers who've accelerated their workflow with DevStarter
                     </p>
-                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-12 py-4 rounded-lg text-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center space-x-2 mx-auto" onClick={() => navigate("/generate")}>
-                        <Zap className="w-6 h-6" />
-                        <span>Generate Your First Boilerplate</span>
-                    </button>
+                    <GenerateButton onClick={() => navigate("/generate")} />
                     <p className="text-gray-400 mt-4">No signup required • Free forever • Open source</p>
                 </div>
             </div>
