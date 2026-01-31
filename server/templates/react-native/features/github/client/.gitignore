@@ -1,0 +1,14 @@
+node_modules/
+.expo/
+dist/
+web-build/
+
+# macOS
+.DS_Store
+
+# Android/Xcode
+android/
+ios/
+*.jks
+*.p12
+*.key

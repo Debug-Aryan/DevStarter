@@ -1,0 +1,8 @@
+{
+    "ignore": [
+        "temp/*",
+        "templates/*",
+        "generated/*"
+    ],
+    "ext": "js,json"
+}

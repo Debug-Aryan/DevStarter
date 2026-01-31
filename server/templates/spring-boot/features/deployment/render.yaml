@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: devstarter-spring-boot
+    env: docker
+    plan: free
+    dockerContext: .
+    envVars:
+      - key: SERVER_PORT
+        value: 8080
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
