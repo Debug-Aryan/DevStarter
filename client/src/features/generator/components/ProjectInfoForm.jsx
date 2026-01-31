@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useProject } from "../../../context/ProjectContext";
+import GenerateButton from '../../../components/common/GenerateButton';
 
 import {
     User,
@@ -173,7 +174,7 @@ export default function ProjectInfoForm({ onBack }) {
                             <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
                                 <Sparkles className="w-6 h-6 text-white" />
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r pb-1 from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            <h1 className="text-3xl md:text-4xl font-bold bg-white bg-clip-text text-transparent">
                                 Project Information
                             </h1>
                         </div>
@@ -302,49 +303,13 @@ export default function ProjectInfoForm({ onBack }) {
 
                         {/* Submit Button */}
                         <div className="flex flex-col sm:flex-row gap-6">
-                            <button
-                                onClick={onBack}
-                                className="border border-gray-600 px-4 rounded-lg font-semibold hover:bg-gray-800 transition-all"
-                            >
-                                Back
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleSubmit}
-                                disabled={!isFormValid() || isSubmitting}
-                                className={`
-                flex-1 py-4 rounded-xl font-semibold text-white transition-all duration-300 transform
-                flex items-center justify-center space-x-2
-                ${isFormValid() && !isSubmitting
-                                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl'
-                                        : 'bg-gray-600 cursor-not-allowed opacity-50'
-                                    }
-              `}
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        <span>Generating...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Code className="w-5 h-5" />
-                                        <span>Create Project</span>
-                                    </>
-                                )}
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setFormData({ projectName: '', projectTitle: '', description: '' });
-                                    setErrors({});
-                                    setTouched({});
-                                }}
-                                className="px-6 py-4 border border-gray-600 rounded-xl font-semibold text-gray-300 hover:bg-purple-900 hover:text-white transition-all duration-300"
-                            >
-                                Reset
-                            </button>
+                            <GenerateButton label='Back' className='bg-black hover:bg-gray-800 transition-all' onClick={onBack} />
+                            <GenerateButton label='Create Project' onClick={handleSubmit} disabled={!isFormValid() || isSubmitting} />
+                            <GenerateButton label='Reset' className='bg-black hover:bg-red-600 transition-all' onClick={() => {
+                                setFormData({ projectName: '', projectTitle: '', description: '' });
+                                setErrors({});
+                                setTouched({});
+                            }} />
                         </div>
 
                         {/* Form Status */}

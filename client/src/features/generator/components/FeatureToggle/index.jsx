@@ -126,11 +126,11 @@ export default function FeatureToggle({ onNext, onBack }) {
 
                     {/* Header */}
                     <div className="text-center mb-12">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
                             Customize Your Boilerplate
                         </h1>
                         <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-                            Select the features you want to include in your project. Each feature comes with production-ready code and best practices.
+                            Add ready-to-use features to your project instantly.
                         </p>
 
                         {/* Feature Counter */}

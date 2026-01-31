@@ -4,7 +4,7 @@ import { Download, Play } from 'lucide-react';
 import Squares from "../../../components/common/Squares";
 import TextType from "../../../components/common/TextType";
 import GenerateButton from "../../../components/common/GenerateButton";
-import ViewDemoButton from "../../../components/common/ViewDemoButton";
+
 
 export default function HeroSection() {
     const navigate = useNavigate();
@@ -68,7 +68,7 @@ export default function HeroSection() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 mb-12">
                         <GenerateButton onClick={() => navigate("/generate")} />
-                        <ViewDemoButton onClick={() => window.open("https://devstarter-demo.vercel.app/", "_blank")} />
+                        <GenerateButton label="View Demo" className="bg-transparent border border-gray-800 rounded-full hover:bg-white/5 hover:border-gray-600 transition-all duration-300 active:scale-95" onClick={() => navigate("/generate")} />
                     </div>
                 </div>
             </div>

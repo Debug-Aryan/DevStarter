@@ -65,7 +65,7 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
                     <div className={`
             relative w-12 h-6 rounded-full transition-all duration-300 cursor-pointer
             ${isEnabled
-                            ? 'bg-gradient-to-r from-blue-500 to-purple-500'
+                            ? 'bg-green-700'
                             : 'bg-gray-600'
                         }
           `}>

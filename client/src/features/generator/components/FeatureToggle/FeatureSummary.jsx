@@ -1,5 +1,6 @@
 import React from 'react';
 import { Info, CheckCircle2 } from 'lucide-react';
+import GenerateButton from '../../../../components/common/GenerateButton';
 
 export default function FeatureSummary({ features, featureList, onNext, onBack, onReset, onGenerate }) {
     return (
@@ -37,24 +38,9 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button
-                    onClick={onBack}
-                    className="border border-gray-600 px-3 rounded-lg font-semibold hover:bg-gray-800 transition-all"
-                >
-                    Back
-                </button>
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center space-x-2"
-                    onClick={onGenerate}
-                >
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span>Generate Boilerplate</span>
-                </button>
-                <button
-                    onClick={onReset}
-                    className="border border-gray-600 px-4 py-4 rounded-lg font-semibold hover:bg-green-800 transition-all"
-                >
-                    Reset All
-                </button>
+                <GenerateButton label='Back' className='bg-black hover:bg-gray-800 transition-all' onClick={onBack} />
+                <GenerateButton label="Generate Boilerplate" onClick={onGenerate} />
+                <GenerateButton label='Reset All' className='bg-black hover:bg-red-600 transition-all' onClick={onReset} />
             </div>
         </div>
     );

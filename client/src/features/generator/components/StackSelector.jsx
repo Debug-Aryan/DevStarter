@@ -13,6 +13,7 @@ import {
     Circle
 } from 'lucide-react';
 import { Footer } from '../../../components/layout';
+import GenerateButton from '../../../components/common/GenerateButton';
 
 export default function StackSelector({ onNext }) {
     const navigate = useNavigate();
@@ -113,11 +114,11 @@ export default function StackSelector({ onNext }) {
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
                             Choose Your Stack
                         </h1>
                         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                            Select from our curated collection of popular tech stacks. Each comes pre-configured with best practices and essential tooling.
+                            Choose a tech stack — preconfigured and ready to build.
                         </p>
                     </div>
 
@@ -230,10 +231,7 @@ export default function StackSelector({ onNext }) {
 
                                 {/* Action Buttons */}
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center space-x-2" onClick={onNext}>
-                                        <Code className="w-5 h-5" />
-                                        <span>Customize Features</span>
-                                    </button>
+                                    <GenerateButton label="Customize Features" onClick={onNext} />
                                 </div>
                             </div>
                         </div>
