@@ -165,15 +165,13 @@ export default function ProjectInfoForm({ onBack }) {
 
     return (
         <>
-            <div className="min-h-screen bg-black text-white p-8">
+            <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white p-8">
                 <div className="max-w-2xl mx-auto">
 
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center space-x-3 mb-4">
-                            <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
-                                <Sparkles className="w-6 h-6 text-white" />
-                            </div>
+
                             <h1 className="text-3xl md:text-4xl font-bold bg-white bg-clip-text text-transparent">
                                 Project Information
                             </h1>

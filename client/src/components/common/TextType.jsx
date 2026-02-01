@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 
+
+
 const TextType = ({
   text,
   as: Component = 'div',
@@ -150,6 +152,8 @@ const TextType = ({
   const shouldHideCursor =
     hideCursorWhileTyping && (currentCharIndex < textArray[currentTextIndex].length || isDeleting);
 
+  const hasTextColors = textColors.length > 0;
+
   return createElement(
     Component,
     {
@@ -157,7 +161,12 @@ const TextType = ({
       className: `inline-block whitespace-pre-wrap tracking-tight ${className}`,
       ...props
     },
-    <span className="inline-block align-baseline" style={{ color: getCurrentTextColor() || 'inherit' }}>
+    <span
+      className={`inline-block align-baseline ${
+        hasTextColors ? '' : 'bg-gradient-to-r from-sky-300 via-white to-amber-300 bg-clip-text text-transparent'
+      }`}
+      style={hasTextColors ? { color: getCurrentTextColor() || 'inherit' } : undefined}
+    >
       {displayedText}
     </span>,
     showCursor && (

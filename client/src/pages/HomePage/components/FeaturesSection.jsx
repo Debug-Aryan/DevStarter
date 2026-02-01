@@ -1,8 +1,13 @@
 import { features } from '../data/landingPageData';
 
+// black to grey gradient bg top to 800 bg bottom
+
 export default function FeaturesSection() {
     return (
-        <section id="features" className="relative z-10 px-6 py-20">
+        <section
+            id="features"
+            className="relative z-10 bg-gradient-to-b from-black to-gray-900 px-6 py-20"
+        >
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">Everything You Need</h2>

@@ -3,7 +3,7 @@ import { testimonials } from '../data/landingPageData';
 
 export default function TestimonialsSection() {
     return (
-        <section id="testimonials" className="relative z-10 px-6 py-20">
+        <section id="testimonials" className="relative z-10 bg-gradient-to-b from-gray-900 to-black px-6 py-20">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">Why Developers Love It</h2>

@@ -57,10 +57,10 @@ export default function HeroSection() {
                         as="div"
                         text={["Kickstart Your Project in Seconds", "Generate full-stack boilerplates instantly.", "Skip setup. Start building."]}
                         typingSpeed={75}
-                        initialDelay={0}
+                        initialDelay={10}
                         deletingSpeed={50}
                         loop={true}
-                        cursorCharacter="|"
+                        cursorCharacter="_"
                         showCursor={true}
                         cursorBlinkDuration={0.5}
                         className="text-3xl md:text-6xl font-bold mb-6 bg-white bg-clip-text text-transparent leading-tight md:leading-[1.1] pb-2 min-h-[5rem] md:min-h-[9rem]"
