@@ -31,18 +31,24 @@ export default function DownloadCard({ onDownload }) {
     const handleDownload = async () => {
         if (!generatedFile) return;
         setIsDownloading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // small delay for UI
+        try {
+            // Show a short local "Downloading" state before starting the browser download.
+            await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        if (onDownload) onDownload();
+            const link = document.createElement('a');
+            link.href = generatedFile.url;
+            link.download = generatedFile.fileName;
+            // Prevent the global click-capture loader from blocking the file download.
+            link.setAttribute('data-no-loader', 'true');
+            link.setAttribute('data-no-delay', 'true');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
 
-        const link = document.createElement('a');
-        link.href = generatedFile.url;
-        link.download = generatedFile.fileName;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        setIsDownloading(false);
+            if (onDownload) onDownload();
+        } finally {
+            setIsDownloading(false);
+        }
     };
 
     const handleGithubUpload = async () => {
@@ -92,56 +98,36 @@ export default function DownloadCard({ onDownload }) {
                         <button
                             onClick={handleDownload}
                             disabled={isDownloading || isUploading}
-                            className={`
-                px-4 py-3 rounded-lg font-semibold text-white transition-all duration-300 transform
-                flex items-center justify-center space-x-2
-                ${isDownloading
-                                    ? 'bg-gray-600 cursor-not-allowed'
-                                    : isUploading
-                                        ? 'bg-gray-600 cursor-not-allowed opacity-50'
-                                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl'
-                                }
-              `}
+                            data-no-loader="true"
+                            data-no-delay="true"
+                            className="group relative w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-emerald-500 text-slate-900 border border-emerald-200/60 hover:bg-emerald-300 hover:border-emerald-100/80"
                         >
+                            <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             {isDownloading ? (
-                                <>
-                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    <span className="text-sm">Downloading...</span>
-                                </>
+                                <div className="relative z-10 w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
                             ) : (
-                                <>
-                                    <Download className="w-4 h-4" />
-                                    <span className="text-sm">Download</span>
-                                </>
+                                <Download className="relative z-10 w-5 h-5 text-slate-900" />
                             )}
+                            <span className="relative z-10 text-sm font-semibold">Download ZIP File</span>
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-emerald-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
 
                         {/* Upload to GitHub Button */}
                         <button
                             onClick={handleGithubUpload}
                             disabled={isUploading || isDownloading}
-                            className={`
-                px-4 py-3 rounded-lg font-semibold text-white transition-all duration-300 transform
-                flex items-center justify-center space-x-2
-                ${isUploading
-                                    ? 'bg-gray-600 cursor-not-allowed'
-                                    : isDownloading
-                                        ? 'bg-gray-600 cursor-not-allowed opacity-50'
-                                        : 'bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 hover:scale-105 shadow-lg hover:shadow-xl border border-gray-600'
-                                }
-              `}
+                            data-no-loader="true"
+                            data-no-delay="true"
+                            className="group relative w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-gradient-to-r from-[#070a0f] via-[#0f141c] to-[#161B22] text-gray-200 border border-gray-700 hover:border-gray-500/70 hover:from-[#0b1018] hover:to-[#1f2631]"
                         >
+                            <div className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             {isUploading ? (
-                                <>
-                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                    <span className="text-sm">Uploading...</span>
-                                </>
+                                <div className="relative z-10 w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             ) : (
-                                <>
-                                    <Github className="w-4 h-4" />
-                                    <span className="text-sm">Upload to GitHub</span>
-                                </>
+                                <Github className="relative z-10 w-5 h-5 text-gray-200" />
                             )}
+                            <span className="relative z-10 text-sm font-semibold text-gray-200 group-hover:text-white transition-colors duration-300">Upload to GitHub</span>
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-gray-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
                     </div>
 

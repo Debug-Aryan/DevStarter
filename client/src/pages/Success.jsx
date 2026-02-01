@@ -13,7 +13,7 @@ export default function Success() {
 
   return (
     <>
-      <div className="min-h-screen bg-black text-white p-8">
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white p-8">
         <div className="max-w-3xl mx-auto">
 
           <SuccessMessage
@@ -27,10 +27,10 @@ export default function Success() {
 
             {/* Header */}
             <div className="text-center animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r pb-1 from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-white bg-clip-text text-transparent">
                 Your Project is Ready! <span className="bg-none text-black">     🚀</span>
               </h1>
-              <p className="text-xl text-gray-300">
+              <p className="text-lg text-gray-300">
                 Choose how you want to get your customized boilerplate
               </p>
             </div>

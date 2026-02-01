@@ -9,6 +9,33 @@ const ReactNativeGenerator = require("../generators/ReactNativeGenerator");
 const path = require("path");
 const fs = require("fs-extra");
 
+async function safeRemove(targetPath, { attempts = 8, baseDelayMs = 150 } = {}) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      await fs.promises.rm(targetPath, { recursive: true, force: true });
+      return;
+    } catch (err) {
+      const retryable = err && (err.code === 'EBUSY' || err.code === 'EPERM' || err.code === 'ENOTEMPTY');
+      if (!retryable || attempt === attempts) throw err;
+      await new Promise((resolve) => setTimeout(resolve, baseDelayMs * attempt));
+    }
+  }
+}
+
+async function safeUnlink(filePath, { attempts = 6, baseDelayMs = 120 } = {}) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      await fs.promises.unlink(filePath);
+      return;
+    } catch (err) {
+      if (err && err.code === 'ENOENT') return;
+      const retryable = err && (err.code === 'EBUSY' || err.code === 'EPERM');
+      if (!retryable || attempt === attempts) throw err;
+      await new Promise((resolve) => setTimeout(resolve, baseDelayMs * attempt));
+    }
+  }
+}
+
 module.exports = async (req, res) => {
   const { stack, features, projectInfo } = req.body;
   console.log("Received request:", req.body);
@@ -23,8 +50,12 @@ module.exports = async (req, res) => {
   const tempDir = path.join(__dirname, "..", "..", "temp_projects");
 
   const projectTempPath = path.join(tempDir, projectName);
-  if (fs.existsSync(projectTempPath)) {
-    fs.rmSync(projectTempPath, { recursive: true, force: true });
+  if (await fs.pathExists(projectTempPath)) {
+    try {
+      await safeRemove(projectTempPath);
+    } catch (cleanupErr) {
+      console.warn("Pre-cleanup warning:", cleanupErr);
+    }
   }
 
   try {
@@ -101,12 +132,15 @@ module.exports = async (req, res) => {
       if (err) {
         console.error("Download error:", err);
       }
-      try {
-        fs.rmSync(projectTempPath, { recursive: true, force: true });
-        fs.unlinkSync(zipPath);
-      } catch (cleanupErr) {
-        console.error("Cleanup error:", cleanupErr);
-      }
+
+      (async () => {
+        try {
+          await safeRemove(projectTempPath);
+          await safeUnlink(zipPath);
+        } catch (cleanupErr) {
+          console.error("Cleanup error:", cleanupErr);
+        }
+      })();
     });
 
   } catch (error) {

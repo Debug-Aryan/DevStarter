@@ -1,40 +1,14 @@
-import {
-    FolderOpen,
-    Terminal,
-    Play,
-    FileText,
-    Sparkles,
-
-} from 'lucide-react';
+import { useProject } from "../../../context/ProjectContext";
+import { tipsByStack } from "../../../data/tipsByStack";
+import { Sparkles } from 'lucide-react';
 
 // 3. TipsToStart Component
 export default function TipsToStart() {
-    const tips = [
-        {
-            icon: <FolderOpen className="w-5 h-5" />,
-            title: 'Unzip the folder',
-            description: 'Extract the downloaded ZIP file to your desired location',
-            command: null
-        },
-        {
-            icon: <Terminal className="w-5 h-5" />,
-            title: 'Install dependencies',
-            description: 'Navigate to the project folder and install packages',
-            command: 'npm install'
-        },
-        {
-            icon: <Play className="w-5 h-5" />,
-            title: 'Start development server',
-            description: 'Launch your project in development mode',
-            command: 'npm run dev'
-        },
-        {
-            icon: <FileText className="w-5 h-5" />,
-            title: 'Customize README',
-            description: 'Update the README.md with your project details',
-            command: null
-        }
-    ];
+    const { stack } = useProject();
+
+    // Get tips for the selected stack, fallback to mern if not found
+    const currentTips = tipsByStack[stack] || tipsByStack.mern;
+    const stackTitle = stack ? stack.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Project';
 
     return (
         <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-6 shadow-xl">
@@ -42,11 +16,11 @@ export default function TipsToStart() {
                 <div className="p-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg">
                     <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Next Steps</h3>
+                <h3 className="text-xl font-bold text-white">Next Steps for {stackTitle}</h3>
             </div>
 
             <div className="space-y-4">
-                {tips.map((tip, index) => (
+                {currentTips.map((tip, index) => (
                     <div
                         key={index}
                         className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300"
