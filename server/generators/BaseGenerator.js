@@ -85,7 +85,36 @@ class BaseGenerator {
         });
     }
 
+    async generateDynamicReadme() {
+        if (!this.features.includes('readme')) return;
+
+        try {
+            const { generateReadme } = require('../services/openRouterService');
+
+            const readmeContent = await generateReadme({
+                stack: this.stack,
+                features: this.features,
+                projectName: this.projectInfo.name || 'my-app',
+                projectTitle: this.projectInfo.title,
+                projectDescription: this.projectInfo.description || 'A generated project'
+            });
+
+            if (readmeContent) {
+                const readmePath = path.join(this.projectPath, 'README.md');
+                fs.writeFileSync(readmePath, readmeContent, 'utf8');
+                console.log(`Dynamic README generated for ${this.projectName}`);
+            }
+        } catch (error) {
+            console.error('Dynamic README generation failed, using static fallback:', error.message);
+            // Fallback: Ensure the static README is consistent if dynamic fails
+            // (It logic already assumes the static one was copied by the subclass if 'readme' feature was selected)
+        }
+    }
+
     async zipAndReturn() {
+        // Attempt to generate dynamic README before zipping
+        await this.generateDynamicReadme();
+
         // Zip the specific project folder, not the temp container
         return await zipProject(this.projectPath);
     }
