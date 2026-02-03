@@ -33,13 +33,20 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
                 </div>
 
                 {/* Feature Icon */}
-                <div className={`
-          inline-flex p-3 rounded-xl bg-gradient-to-r ${feature.color} mb-4
-          ${isEnabled ? 'shadow-lg' : 'opacity-80 group-hover:opacity-100'}
+                <div
+                    className={`
+          inline-flex p-[2px] rounded-2xl bg-gradient-to-r ${feature.color} mb-4
+          ${isEnabled ? 'shadow-lg shadow-black/30' : 'opacity-90 group-hover:opacity-100'}
           transition-all duration-300
-        `}>
-                    <div className="text-white">
-                        {feature.icon}
+        `}
+                >
+                    <div className="bg-white rounded-[14px] p-3">
+                        <img
+                            src={feature.icon}
+                            alt={feature.title}
+                            className="w-8 h-8 object-contain"
+                            draggable="false"
+                        />
                     </div>
                 </div>
 

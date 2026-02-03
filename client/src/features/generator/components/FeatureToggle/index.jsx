@@ -1,23 +1,23 @@
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useProject } from "../../../../context/ProjectContext";
 import {
-    Shield,
-    Container,
-    Github,
-    FileText,
-    Palette,
-    Code,
-    BookOpen,
-    Settings,
     CheckCircle2
 } from 'lucide-react';
-import { Footer, Navbar } from '../../../../components/layout';
+
+import authSvg from '../../../../assets/features/identity-and-access-management-svgrepo-com.svg';
+import dockerSvg from '../../../../assets/features/docker-icon-svgrepo-com.svg';
+import githubSvg from '../../../../assets/features/github-142-svgrepo-com.svg';
+import lintingSvg from '../../../../assets/features/prettier-svgrepo-com.svg';
+import deploymentSvg from '../../../../assets/features/deploy-svgrepo-com.svg';
+import tailwindSvg from '../../../../assets/features/tailwind-svgrepo-com.svg';
+import readmeSvg from '../../../../assets/features/readme-svgrepo-com.svg';
+import envSvg from '../../../../assets/features/gear-file-svgrepo-com.svg';
+
+import { Footer } from '../../../../components/layout';
 import FeatureCard from './FeatureCard';
 import FeatureSummary from './FeatureSummary';
 
 export default function FeatureToggle({ onNext, onBack }) {
-    const navigate = useNavigate();
     const { setFeatures: setProjectFeatures } = useProject();
 
     const [features, setFeatures] = useState({
@@ -36,7 +36,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'auth',
             title: 'Authentication',
             description: 'JWT tokens, password hashing, and login/register routes pre-configured',
-            icon: <Shield className="w-6 h-6" />,
+            icon: authSvg,
             color: 'from-green-500 to-emerald-600',
             category: 'Security'
         },
@@ -44,7 +44,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'docker',
             title: 'Docker Setup',
             description: 'Dockerfile, docker-compose.yml, and container orchestration ready',
-            icon: <Container className="w-6 h-6" />,
+            icon: dockerSvg,
             color: 'from-blue-500 to-cyan-600',
             category: 'DevOps'
         },
@@ -52,7 +52,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'github',
             title: 'GitHub Init',
             description: 'Initialize Git repository with .gitignore and README template',
-            icon: <Github className="w-6 h-6" />,
+            icon: githubSvg,
             color: 'from-gray-600 to-gray-800',
             category: 'Version Control'
         },
@@ -60,7 +60,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'linting',
             title: 'Prettier + Linter Setup',
             description: 'Pre-configured ESLint and Prettier with project-specific rules',
-            icon: <Code className="w-6 h-6" />,
+            icon: lintingSvg,
             color: 'from-orange-500 to-red-600',
             category: 'Code Quality'
         },
@@ -68,7 +68,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'deployment',
             title: 'Deployment Config',
             description: 'Vercel, Netlify, and AWS deployment configurations included',
-            icon: <Settings className="w-6 h-6" />,
+            icon: deploymentSvg,
             color: 'from-violet-500 to-purple-600',
             category: 'Deployment'
         },
@@ -76,7 +76,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'tailwind',
             title: 'Tailwind CSS',
             description: 'Utility-first CSS framework with custom config and components',
-            icon: <Palette className="w-6 h-6" />,
+            icon: tailwindSvg,
             color: 'from-cyan-500 to-blue-600',
             category: 'Styling'
         },
@@ -84,7 +84,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'readme',
             title: 'README Generator',
             description: 'Auto-generate professional README with badges, usage, and setup steps',
-            icon: <BookOpen className="w-6 h-6" />,
+            icon: readmeSvg,
             color: 'from-pink-500 to-rose-600',
             category: 'Documentation'
         },
@@ -92,7 +92,7 @@ export default function FeatureToggle({ onNext, onBack }) {
             id: 'env',
             title: 'Environment File',
             description: 'Pre-configured .env files with common variables and validation',
-            icon: <FileText className="w-6 h-6" />,
+            icon: envSvg,
             color: 'from-yellow-500 to-orange-600',
             category: 'Configuration'
         }

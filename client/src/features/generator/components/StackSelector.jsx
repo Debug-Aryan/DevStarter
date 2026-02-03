@@ -1,33 +1,61 @@
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useProject } from "../../../context/ProjectContext";
-import {
-    Code,
-    Database,
-    Globe,
-    Zap,
-    Server,
-    Smartphone,
-    Layers,
-    CheckCircle2,
-    Circle
-} from 'lucide-react';
+import { CheckCircle2, Circle } from 'lucide-react';
 import { Footer } from '../../../components/layout';
 import GenerateButton from '../../../components/common/GenerateButton';
 
+import mernIcon from '../../../assets/stacks/mern.svg';
+import nextJsIcon from '../../../assets/stacks/nextjs-icon-svgrepo-com.svg';
+import nodeExpressIcon from '../../../assets/stacks/nodejs-logo-svgrepo-com.svg';
+import djangoIcon from '../../../assets/stacks/django-svgrepo-com.svg';
+import springBootIcon from '../../../assets/stacks/Spring_Boot.svg';
+import flaskIcon from '../../../assets/stacks/icons8-flask-50.svg';
+import fullStackTsIcon from '../../../assets/stacks/typescript-icon-svgrepo-com.svg';
+import reactNativeIcon from '../../../assets/stacks/icons8-react-native-50.svg';
+
 export default function StackSelector({ onNext }) {
-    const navigate = useNavigate();
     const { setStack } = useProject();
 
-
     const [selectedStack, setSelectedStack] = useState(null);
+
+    const iconNode = (src, alt, { bgColor } = {}) => {
+        const hasBg = Boolean(bgColor);
+        const img = (
+            <img
+                src={src}
+                alt={alt}
+                className={`${hasBg ? 'w-full h-full' : 'w-12 h-12'} object-contain block`}
+                loading="lazy"
+                draggable={false}
+            />
+        );
+
+        if (!hasBg) return img;
+
+        return (
+            <div
+                className="w-12 h-12 rounded-lg p-1 flex items-center justify-center"
+                style={{ backgroundColor: bgColor }}
+            >
+                {img}
+            </div>
+        );
+    };
 
     const stacks = [
         {
             id: 'mern',
             title: 'MERN Stack',
             description: 'MongoDB, Express.js, React, Node.js - Full-stack JavaScript solution',
-            icon: <Database className="w-8 h-8" />,
+            icon: (
+                <img
+                    src={mernIcon}
+                    alt="MERN"
+                    className="w-14 h-14 object-contain block rounded-2xl"
+                    loading="lazy"
+                    draggable={false}
+                />
+            ),
             color: 'from-green-500 to-emerald-600',
             tags: ['MongoDB', 'Express', 'React', 'Node.js'],
             popular: true
@@ -36,7 +64,7 @@ export default function StackSelector({ onNext }) {
             id: 'nextjs',
             title: 'Next.js',
             description: 'React framework with SSR, SSG, API routes, and great DX',
-            icon: <Globe className="w-8 h-8" />,
+            icon: iconNode(nextJsIcon, 'Next.js', { bgColor: '#ffffff' }),
             color: 'from-black-200 to-gray-600',
             tags: ['React', 'SSR', 'SSG', 'API Routes'],
             popular: true
@@ -45,7 +73,7 @@ export default function StackSelector({ onNext }) {
             id: 'node-express',
             title: 'Node.js + Express',
             description: 'Backend-focused stack for building robust APIs and microservices',
-            icon: <Server className="w-8 h-8" />,
+            icon: iconNode(nodeExpressIcon, 'Node.js + Express', { bgColor: '#0B0F14' }),
             color: 'from-yellow-500 to-orange-600',
             tags: ['Node.js', 'Express', 'REST API', 'Backend'],
             popular: false
@@ -54,7 +82,7 @@ export default function StackSelector({ onNext }) {
             id: 'django',
             title: 'Django',
             description: 'Python-based web framework with batteries included and rapid development',
-            icon: <Code className="w-8 h-8" />,
+            icon: iconNode(djangoIcon, 'Django', { bgColor: '#0B0F14' }),
             color: 'from-green-600 to-emerald-700',
             tags: ['Python', 'Django', 'ORM', 'Full-Stack'],
             popular: true
@@ -63,7 +91,7 @@ export default function StackSelector({ onNext }) {
             id: 'spring-boot',
             title: 'Spring Boot',
             description: 'Java framework for enterprise-grade applications and microservices',
-            icon: <Layers className="w-8 h-8" />,
+            icon: iconNode(springBootIcon, 'Spring Boot', { bgColor: 'rgb(249, 249, 249)' }),
             color: 'from-blue-700 to-green-600',
             tags: ['Java', 'Spring', 'REST', 'Enterprise'],
             popular: true
@@ -72,7 +100,7 @@ export default function StackSelector({ onNext }) {
             id: 'flask',
             title: 'Flask',
             description: 'Lightweight Python microframework for building APIs quickly',
-            icon: <Zap className="w-8 h-8" />,
+            icon: iconNode(flaskIcon, 'Flask', { bgColor: '#ffffff' }),
             color: 'from-yellow-400 to-red-500',
             tags: ['Python', 'Flask', 'Microframework', 'API'],
             popular: false
@@ -81,7 +109,7 @@ export default function StackSelector({ onNext }) {
             id: 'full-stack-ts',
             title: 'Full-Stack TypeScript',
             description: 'End-to-end TypeScript with React, Node.js, and PostgreSQL',
-            icon: <Layers className="w-8 h-8" />,
+            icon: iconNode(fullStackTsIcon, 'Full-Stack TypeScript'),
             color: 'from-blue-600 to-purple-700',
             tags: ['TypeScript', 'React', 'Node.js', 'PostgreSQL'],
             popular: true
@@ -90,7 +118,7 @@ export default function StackSelector({ onNext }) {
             id: 'react-native',
             title: 'React Native',
             description: 'Cross-platform mobile development with React and native performance',
-            icon: <Smartphone className="w-8 h-8" />,
+            icon: iconNode(reactNativeIcon, 'React Native', { bgColor: '#ffffff' }),
             color: 'from-blue-500 to-cyan-600',
             tags: ['React', 'Mobile', 'iOS', 'Android'],
             popular: true
@@ -169,14 +197,8 @@ export default function StackSelector({ onNext }) {
 
                                         <div className="p-6">
                                             {/* Icon */}
-                                            <div className={`
-                      inline-flex p-3 rounded-xl bg-gradient-to-r ${stack.color} mb-4
-                      ${isSelected ? 'shadow-lg' : 'group-hover:shadow-md'}
-                      transition-all duration-300
-                    `}>
-                                                <div className="text-white">
-                                                    {stack.icon}
-                                                </div>
+                                            <div className="mb-4">
+                                                {stack.icon}
                                             </div>
 
                                             {/* Title */}

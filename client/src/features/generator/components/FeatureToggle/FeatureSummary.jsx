@@ -23,9 +23,14 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
                     .filter(feature => features[feature.id])
                     .map(feature => (
                         <div key={feature.id} className="flex items-center space-x-3 bg-white/5 rounded-lg p-3">
-                            <div className={`p-2 rounded-lg bg-gradient-to-r ${feature.color}`}>
-                                <div className="text-white">
-                                    {feature.icon}
+                            <div className={`inline-flex p-[2px] rounded-xl bg-gradient-to-r ${feature.color}`}>
+                                <div className="bg-white rounded-[10px] p-2">
+                                    <img
+                                        src={feature.icon}
+                                        alt={feature.title}
+                                        className="w-8 h-8 object-contain"
+                                        draggable="false"
+                                    />
                                 </div>
                             </div>
                             <div>
