@@ -26,7 +26,6 @@ export default function ProjectInfoForm({ onBack }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const { stack, features, setGeneratedFile, projectInfo, setProjectInfo } = useProject();
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 
 
@@ -70,7 +69,8 @@ export default function ProjectInfoForm({ onBack }) {
     };
 
     const handleSubmit = async (e) => {
-        setIsSubmitting(true)
+        e?.preventDefault?.();
+        setIsSubmitting(true);
         try {
             // Save to global context
             console.log(formData)
@@ -112,14 +112,12 @@ export default function ProjectInfoForm({ onBack }) {
                 fileSize: `${(blob.size / 1024).toFixed(2)} KB`,
                 filesCount: fileCount
             });
-
-            await delay(1500)
             navigate("/success");
         } catch (error) {
             console.error("Error generating project:", error);
             alert("Something went wrong while generating your project.");
+            setIsSubmitting(false);
         }
-        setIsSubmitting(false);
     };
 
     const isFieldValid = (fieldName) => {
@@ -151,7 +149,7 @@ export default function ProjectInfoForm({ onBack }) {
             placeholder: 'AI Powered Food Delivery Web-Application',
             icon: <User className="w-5 h-5" />,
             type: 'text',
-            maxLength: 30
+            maxLength: 100
         },
         {
             name: 'description',
@@ -159,7 +157,7 @@ export default function ProjectInfoForm({ onBack }) {
             placeholder: 'A brief description of project which can help to generate README.md file',
             icon: <FileText className="w-5 h-5" />,
             type: 'textarea',
-            maxLength: 200
+            maxLength: 500
         }
     ];
 

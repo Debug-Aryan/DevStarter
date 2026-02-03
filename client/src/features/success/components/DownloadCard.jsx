@@ -62,7 +62,7 @@ export default function DownloadCard({ onDownload }) {
     };
 
     return (
-        <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+        <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-6 transition-all duration-300 shadow-xl">
 
             <div className="flex items-start space-x-4">
                 {/* File Icon */}
