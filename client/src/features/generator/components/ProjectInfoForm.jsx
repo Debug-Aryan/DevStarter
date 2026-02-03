@@ -157,7 +157,7 @@ export default function ProjectInfoForm({ onBack }) {
             placeholder: 'A brief description of project which can help to generate README.md file',
             icon: <FileText className="w-5 h-5" />,
             type: 'textarea',
-            maxLength: 500
+            maxLength: 1500
         }
     ];
 
@@ -199,14 +199,14 @@ export default function ProjectInfoForm({ onBack }) {
                                         <div className="relative">
                                             {/* Icon */}
                                             <div className={`
-                      absolute left-4  top-1/2 transform -translate-y-1/2 transition-colors duration-300 z-10
+                      absolute left-4 transition-colors duration-300 z-10
+                      ${field.type === 'textarea' ? 'top-3' : 'top-1/2 transform -translate-y-1/2'}
                       ${isFieldValid(field.name)
                                                     ? 'text-green-400'
                                                     : isFieldInvalid(field.name)
                                                         ? 'text-red-400'
                                                         : 'text-gray-400'
                                                 }
-                      ${field.type === 'textarea' ? 'top-4 transform-none' : ''}
                     `}>
                                                 {field.icon}
                                             </div>
@@ -223,7 +223,7 @@ export default function ProjectInfoForm({ onBack }) {
                                                     maxLength={field.maxLength}
                                                     rows={4}
                                                     className={`
-                          w-full pl-14 pr-4 py-4 pt-2 bg-black/30 border rounded-xl text-white placeholder-gray-400 
+                          w-full pl-14 pr-4 py-4 pt-2 bg-black/30 border rounded-xl text-white placeholder-gray-400 themed-scrollbar
                           focus:outline-none focus:ring-2 transition-all duration-300 resize-none
                           ${isFieldValid(field.name)
                                                             ? 'border-green-500 focus:ring-green-500/50 bg-green-500/5'

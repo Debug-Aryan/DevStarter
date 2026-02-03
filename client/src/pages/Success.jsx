@@ -28,7 +28,7 @@ export default function Success() {
             {/* Header */}
             <div className="text-center animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
               <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-white bg-clip-text text-transparent">
-                Your Project is Ready! <span className="bg-none text-black">     🚀</span>
+                Your Project is Ready! <span className="bg-none text-black">     </span>
               </h1>
               <p className="text-lg text-gray-300">
                 Choose how you want to get your customized boilerplate

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useProject } from "../../../context/ProjectContext";
+import zipFolderSvg from "../../../assets/success/zip-folder.svg";
 import {
     Download,
     FileText,
-    Package,
     HardDrive,
     Github,
 } from 'lucide-react';
@@ -66,8 +66,12 @@ export default function DownloadCard({ onDownload }) {
 
             <div className="flex items-start space-x-4">
                 {/* File Icon */}
-                <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
-                    <Package className="w-6 h-6 text-white" />
+                <div className="flex-shrink-0">
+                    <img
+                        src={zipFolderSvg}
+                        alt="ZIP folder"
+                        className="w-8 h-8 object-contain"
+                    />
                 </div>
 
                 {/* File Details */}
