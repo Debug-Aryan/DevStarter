@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Code, Menu, X } from 'lucide-react';
-import GenerateButton from '../common/GenerateButton';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [activeLink, setActiveLink] = useState('features'); // Default active
+
+  const closeTimerRef = useRef(null);
 
   const navLinks = [
     { id: 'features', label: 'Features', href: '/#features' },
@@ -19,6 +21,35 @@ export default function Navbar() {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    // Keep the navbar in its "open" rounded shape while the mobile menu collapses,
+    // then return to the pill shape after the close animation finishes.
+    const CLOSE_ANIMATION_MS = 300;
+
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+
+    if (isMenuOpen) {
+      setIsMenuClosing(false);
+      return;
+    }
+
+    setIsMenuClosing(true);
+    closeTimerRef.current = setTimeout(() => {
+      setIsMenuClosing(false);
+      closeTimerRef.current = null;
+    }, CLOSE_ANIMATION_MS);
+
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+    };
+  }, [isMenuOpen]);
+
   return (
     // Outer container for positioning (Floating effect)
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center w-full px-4 pt-6 pb-4">
@@ -28,8 +59,8 @@ export default function Navbar() {
         w-full max-w-5xl 
         bg-[#0B0F1A]/90 backdrop-blur-md 
         border border-white/10 shadow-2xl shadow-black/50
-        transition-all duration-300 ease-in-out
-        ${isMenuOpen ? 'rounded-3xl' : 'rounded-full'} // Morphs shape on mobile open
+        transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-in-out
+        ${(isMenuOpen || isMenuClosing) ? 'rounded-3xl' : 'rounded-full'}
       `}>
         <div className="px-6 md:px-8">
           <div className="flex items-center justify-between py-3">
@@ -55,6 +86,7 @@ export default function Navbar() {
                   key={link.id}
                   href={link.href}
                   onClick={() => handleLinkClick(link.id)}
+                  data-no-loader="true"
                   className={`
                     relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 group
                     ${activeLink === link.id 
@@ -91,6 +123,7 @@ export default function Navbar() {
               <button 
                 className="md:hidden p-2 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                data-no-loader="true"
               >
                 {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -100,8 +133,9 @@ export default function Navbar() {
 
         {/* Mobile Navigation Menu */}
         <div className={`
-          md:hidden transition-all duration-300 ease-in-out overflow-hidden
-          ${isMenuOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}
+          md:hidden overflow-hidden origin-top
+          transition-[max-height,opacity,transform,padding] duration-300 ease-in-out
+          ${isMenuOpen ? 'max-h-[520px] opacity-100 scale-y-100 pb-6' : 'max-h-0 opacity-0 scale-y-95 pb-0 pointer-events-none'}
         `}>
           <div className="px-6 space-y-2 pt-2 border-t border-white/5">
             {navLinks.map((link) => (
@@ -109,6 +143,7 @@ export default function Navbar() {
                 key={link.id}
                 href={link.href}
                 onClick={() => handleLinkClick(link.id)}
+                data-no-loader="true"
                 className={`
                   flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
                   ${activeLink === link.id 

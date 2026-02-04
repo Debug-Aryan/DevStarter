@@ -1,15 +1,26 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, Play } from 'lucide-react';
 import Squares from "../../../components/common/Squares";
 import TextType from "../../../components/common/TextType";
 import GenerateButton from "../../../components/common/GenerateButton";
+import DemoVideoModal from "../../../components/common/DemoVideoModal";
 
 
 export default function HeroSection() {
     const navigate = useNavigate();
     const squaresHostRef = useRef(null);
     const squaresCanvasRef = useRef(null);
+    const viewDemoButtonRef = useRef(null);
+
+    const [isDemoOpen, setIsDemoOpen] = useState(false);
+
+    const viewDemoRect = useMemo(() => {
+        if (!isDemoOpen) return null;
+        const el = viewDemoButtonRef.current;
+        if (!el) return null;
+        return el.getBoundingClientRect();
+    }, [isDemoOpen]);
 
     useEffect(() => {
         squaresCanvasRef.current = squaresHostRef.current?.querySelector("canvas") ?? null;
@@ -68,8 +79,21 @@ export default function HeroSection() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 mb-12">
                         <GenerateButton onClick={() => navigate("/generate")} />
-                        <GenerateButton label="View Demo" className="bg-transparent border border-gray-800 rounded-full hover:bg-white/5 hover:border-gray-600 transition-all duration-300 active:scale-95" onClick={() => navigate("/generate")} />
+                        <GenerateButton
+                            ref={viewDemoButtonRef}
+                            label="View Demo"
+                            data-no-loader="true"
+                            className="bg-transparent border border-gray-800 rounded-full hover:bg-white/5 hover:border-gray-600 transition-all duration-300 active:scale-95"
+                            onClick={() => setIsDemoOpen(true)}
+                        />
                     </div>
+
+                    <DemoVideoModal
+                        isOpen={isDemoOpen}
+                        onClose={() => setIsDemoOpen(false)}
+                        videoId="LXb3EKWsInQ"
+                        triggerRect={viewDemoRect}
+                    />
                 </div>
             </div>
         </section>

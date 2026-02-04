@@ -1,13 +1,14 @@
 import React from 'react';
 import { Zap, ArrowRight, Play } from 'lucide-react';
 
-const GenerateButton = ({
+const GenerateButton = React.forwardRef(({
   onClick,
   label = 'Generate Boilerplate',
   className = '',
   type = 'button',
   disabled = false,
-}) => {
+  ...buttonProps
+}, ref) => {
   const labelNormalized = String(label).trim().toLowerCase();
   const isViewDemo = labelNormalized === 'view demo';
   const isTextOnly = labelNormalized === 'back' || labelNormalized === 'reset all' || labelNormalized === 'reset';
@@ -15,9 +16,11 @@ const GenerateButton = ({
   return (
     <div className="flex items-center justify-center p-4">
       <button
+        ref={ref}
         onClick={onClick}
         type={type}
         disabled={disabled}
+        {...buttonProps}
         className={`group relative flex items-center gap-3 px-8 py-4 bg-[#161B22] border border-gray-700 rounded-full cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 ${className}`}
       >
         {/* Subtle Background Glow on Hover */}
@@ -46,6 +49,8 @@ const GenerateButton = ({
       </button>
     </div>
   );
-};
+});
+
+GenerateButton.displayName = 'GenerateButton';
 
 export default GenerateButton;

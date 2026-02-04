@@ -40,11 +40,11 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
           transition-all duration-300
         `}
                 >
-                    <div className="bg-white rounded-[14px] p-3">
+                    <div className="bg-[#F4F7FF] rounded-[14px] p-3 overflow-hidden">
                         <img
                             src={feature.icon}
                             alt={feature.title}
-                            className="w-8 h-8 object-contain"
+                            className="w-8 h-8 object-contain scale-110"
                             draggable="false"
                         />
                     </div>
