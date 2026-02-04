@@ -1,13 +1,18 @@
 import React from 'react';
-import { Info, CheckCircle2 } from 'lucide-react';
+import infoSvg from '../../../../assets/features/information-svgrepo-com.svg';
 import GenerateButton from '../../../../components/common/GenerateButton';
 
 export default function FeatureSummary({ features, featureList, onNext, onBack, onReset, onGenerate }) {
     return (
         <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-8">
             <div className="flex items-start space-x-4 mb-6">
-                <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
-                    <Info className="w-6 h-6 text-white" />
+                <div className="shrink-0">
+                    <img
+                        src={infoSvg}
+                        alt="Information"
+                        className="w-11 h-11 object-contain invert"
+                        draggable="false"
+                    />
                 </div>
                 <div>
                     <h3 className="text-2xl font-bold mb-2">Your Configuration</h3>
