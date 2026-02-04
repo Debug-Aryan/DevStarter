@@ -26,6 +26,7 @@ export default function FeatureToggle({ onNext, onBack }) {
         github: true,
         env: true,
         tailwind: true,
+        readme: true,
         database: false,
         testing: false,
         deployment: false

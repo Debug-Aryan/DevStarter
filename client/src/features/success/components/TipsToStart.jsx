@@ -7,6 +7,7 @@ import number2Svg from "../../../assets/success/number-2-svgrepo-com.svg";
 import number3Svg from "../../../assets/success/number-3-svgrepo-com.svg";
 import number4Svg from "../../../assets/success/number-4-svgrepo-com.svg";
 import number5Svg from "../../../assets/success/number-5-svgrepo-com.svg";
+import number6Svg from "../../../assets/success/number-6-svgrepo-com.svg";
 
 // 3. TipsToStart Component
 export default function TipsToStart() {
@@ -16,7 +17,7 @@ export default function TipsToStart() {
     const currentTips = tipsByStack[stack] || tipsByStack.mern;
     const stackTitle = stack ? stack.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Project';
 
-    const numberSvgs = [number1Svg, number2Svg, number3Svg, number4Svg, number5Svg];
+    const numberSvgs = [number1Svg, number2Svg, number3Svg, number4Svg, number5Svg, number6Svg];
 
     return (
         <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-6 shadow-xl">
