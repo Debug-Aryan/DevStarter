@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Code, Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMenuClosing, setIsMenuClosing] = useState(false);
+  const [isMenuAnimating, setIsMenuAnimating] = useState(false);
   const [activeLink, setActiveLink] = useState('features'); // Default active
-
-  const closeTimerRef = useRef(null);
 
   const navLinks = [
     { id: 'features', label: 'Features', href: '/#features' },
@@ -18,49 +17,63 @@ export default function Navbar() {
 
   const handleLinkClick = (linkId) => {
     setActiveLink(linkId);
+    setIsMenuAnimating(true);
     setIsMenuOpen(false);
   };
 
-  useEffect(() => {
-    // Keep the navbar in its "open" rounded shape while the mobile menu collapses,
-    // then return to the pill shape after the close animation finishes.
-    const CLOSE_ANIMATION_MS = 300;
+  const closeMenu = () => {
+    setIsMenuAnimating(true);
+    setIsMenuOpen(false);
+  };
 
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-
+  const toggleMenu = () => {
     if (isMenuOpen) {
-      setIsMenuClosing(false);
+      closeMenu();
       return;
     }
 
-    setIsMenuClosing(true);
-    closeTimerRef.current = setTimeout(() => {
-      setIsMenuClosing(false);
-      closeTimerRef.current = null;
-    }, CLOSE_ANIMATION_MS);
+    setIsMenuAnimating(true);
+    setIsMenuOpen(true);
+  };
 
-    return () => {
-      if (closeTimerRef.current) {
-        clearTimeout(closeTimerRef.current);
-        closeTimerRef.current = null;
-      }
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') closeMenu();
     };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
   }, [isMenuOpen]);
 
   return (
     // Outer container for positioning (Floating effect)
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center w-full px-4 pt-6 pb-4">
+
+      {/* Mobile backdrop */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            key="mobile-backdrop"
+            className="fixed inset-0 md:hidden bg-black/40 backdrop-blur-[2px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            onClick={closeMenu}
+          />
+        )}
+      </AnimatePresence>
       
       {/* The Pill Navbar */}
       <nav className={`
+        relative z-10
         w-full max-w-5xl 
         bg-[#0B0F1A]/90 backdrop-blur-md 
         border border-white/10 shadow-2xl shadow-black/50
         transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-in-out
-        ${(isMenuOpen || isMenuClosing) ? 'rounded-3xl' : 'rounded-full'}
+        ${(isMenuOpen || isMenuAnimating) ? 'rounded-3xl' : 'rounded-full'}
       `}>
         <div className="px-6 md:px-8">
           <div className="flex items-center justify-between py-3">
@@ -122,8 +135,11 @@ export default function Navbar() {
               {/* Mobile menu button */}
               <button 
                 className="md:hidden p-2 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={toggleMenu}
                 data-no-loader="true"
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-nav"
+                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               >
                 {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -132,41 +148,59 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={`
-          md:hidden overflow-hidden origin-top
-          transition-[max-height,opacity,transform,padding] duration-300 ease-in-out
-          ${isMenuOpen ? 'max-h-[520px] opacity-100 scale-y-100 pb-6' : 'max-h-0 opacity-0 scale-y-95 pb-0 pointer-events-none'}
-        `}>
-          <div className="px-6 space-y-2 pt-2 border-t border-white/5">
-            {navLinks.map((link) => (
-              <a
-                key={link.id}
-                href={link.href}
-                onClick={() => handleLinkClick(link.id)}
-                data-no-loader="true"
-                className={`
-                  flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
-                  ${activeLink === link.id 
-                    ? 'text-blue-300 bg-white/5' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }
-                `}
+        <AnimatePresence initial={false} onExitComplete={() => setIsMenuAnimating(false)}>
+          {isMenuOpen && (
+            <motion.div
+              id="mobile-nav"
+              key="mobile-nav"
+              className="md:hidden overflow-hidden origin-top"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              onAnimationStart={() => setIsMenuAnimating(true)}
+            >
+              <motion.div
+                className="px-6 space-y-2 pt-2 pb-6 border-t border-white/5"
+                initial={{ y: -6 }}
+                animate={{ y: 0 }}
+                exit={{ y: -6 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
               >
-                <span>{link.label}</span>
-              </a>
-            ))}
+                {navLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.href}
+                    onClick={() => handleLinkClick(link.id)}
+                    data-no-loader="true"
+                    className={`
+                      flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
+                      ${activeLink === link.id 
+                        ? 'text-blue-300 bg-white/5' 
+                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      }
+                    `}
+                  >
+                    <span>{link.label}</span>
+                  </a>
+                ))}
 
-            <div className="pt-4">
-              <button 
-                className="group relative w-full overflow-hidden px-4 py-3 rounded-xl text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95"
-                onClick={() => navigate("/generate")}
-              >
-                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <span className="relative z-10">Get Started</span>
-              </button>
-            </div>
-          </div>
-        </div>
+                <div className="pt-4">
+                  <button 
+                    className="group relative w-full overflow-hidden px-4 py-3 rounded-xl text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95"
+                    onClick={() => {
+                      closeMenu();
+                      navigate("/generate");
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="relative z-10">Get Started</span>
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </div>
   );
