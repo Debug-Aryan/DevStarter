@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Code, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import devstarterLogo from '../../assets/devstarter.svg';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -81,11 +82,14 @@ export default function Navbar() {
             {/* Logo/Brand */}
             <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => navigate('/')}>
               <div className="relative">
-                <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 transform group-hover:rotate-12">
-                  <Code className="w-5 h-5 text-white" />
+                <div className="bg-white/5 rounded-full flex items-center justify-center transform transition-transform duration-700 ease-in-out group-hover:rotate-[720deg]">
+                  <img
+                    src={devstarterLogo}
+                    alt="DevStarter"
+                    className="w-11 h-11 object-contain"
+                    draggable="false"
+                  />
                 </div>
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-0 group-hover:opacity-40 blur-md transition-opacity duration-300" />
               </div>
               <span className="text-xl font-bold font-brand bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-blue-300 group-hover:to-purple-300 transition-all duration-300 hidden sm:block">
                 DevStarter

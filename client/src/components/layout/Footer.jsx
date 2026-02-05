@@ -1,4 +1,5 @@
-import { Code, Github, Twitter, Linkedin, Heart, ExternalLink } from 'lucide-react';
+import { Github, Twitter, Linkedin, Heart, ExternalLink } from 'lucide-react';
+import devstarterLogo from '../../assets/devstarter.svg';
 
 export default function Footer() {
     return (
@@ -10,9 +11,14 @@ export default function Footer() {
                     <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
 
                         {/* Left: Logo */}
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                <Code className="w-6 h-6 text-white" />
+                        <div className="flex items-center space-x-3 group">
+                            <div className="bg-white/5 rounded-lg flex items-center justify-center transform transition-transform duration-700 ease-in-out group-hover:rotate-[720deg]">
+                                <img
+                                    src={devstarterLogo}
+                                    alt="DevStarter"
+                                    className="w-8 h-8 object-contain"
+                                    draggable="false"
+                                />
                             </div>
                             <span className="text-xl font-bold font-mono text-white">DevStarter</span>
                         </div>

@@ -49,7 +49,7 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-[3rem_minmax(0,1fr)_3rem] gap-2 items-center w-full sm:flex sm:flex-row sm:gap-6 sm:justify-center">
+            <div className="grid grid-cols-[3rem_minmax(0,1fr)_3rem] gap-2 items-center w-full sm:grid-cols-[auto_auto_auto] sm:gap-6 sm:justify-center">
                 {/* Mobile: plain buttons */}
                 <button
                     type="button"
@@ -81,11 +81,11 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
                 </button>
 
                 {/* Desktop/tablet: GenerateButton */}
-                <div className="hidden sm:block w-full">
+                <div className="hidden sm:block">
                     <GenerateButton
                         label="Generate Boilerplate"
                         wrapperClassName="p-0 sm:p-4"
-                        className="w-full h-12 sm:h-14"
+                        className="h-12 sm:h-14"
                         onClick={onGenerate}
                     />
                 </div>
