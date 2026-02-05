@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useProject } from "../../../context/ProjectContext";
 import zipFolderSvg from "../../../assets/success/zip-folder.svg";
 import {
@@ -7,18 +8,102 @@ import {
     HardDrive,
     Github,
 } from 'lucide-react';
+import { buildGithubAuthorizeUrl, publishToGithub } from '../../../services/githubPublish';
 
 // 2. DownloadCard Component
 export default function DownloadCard({ onDownload }) {
     const { generatedFile } = useProject();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [isDownloading, setIsDownloading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [repoUrl, setRepoUrl] = useState(null);
+    const [publishError, setPublishError] = useState(null);
+    const publishStartedRef = useRef(false);
     // const projectData = {
     //   fileName: generatedFile.fileName,
     //   fileSize: generatedFile.fileSize,
     //   filesCount: 47
     // };
     const projectData = generatedFile || JSON.parse(localStorage.getItem("generatedFile"));
+
+    const repoName = useMemo(() => {
+        const raw = projectData?.fileName || '';
+        return raw.toLowerCase().endsWith('.zip') ? raw.slice(0, -4) : raw;
+    }, [projectData]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const connected = params.get('github_connected');
+        const oauthError = params.get('github_error');
+
+        if (oauthError) {
+            // Security hardening: backend no longer leaks detailed errors in the URL.
+            setPublishError(oauthError);
+            // Clear error params from the URL.
+            navigate('/success', { replace: true });
+            return;
+        }
+
+        if (!connected) return;
+
+        // React StrictMode in dev runs effects twice. Guard to avoid double-publishing.
+        if (publishStartedRef.current) {
+            return;
+        }
+        publishStartedRef.current = true;
+
+        (async () => {
+            setIsUploading(true);
+            setPublishError(null);
+            try {
+                const projectId = projectData?.projectId;
+                if (!projectId) {
+                    throw new Error('Missing projectId. Please regenerate the project and try again.');
+                }
+
+                // Extra guard to prevent double publish across remounts (e.g. mobile layout changes).
+                const publishGuardKey = `ds_publish_started:${projectId}`;
+                const repoUrlKey = `ds_repo_url:${projectId}`;
+                if (sessionStorage.getItem(publishGuardKey) === '1') {
+                    // If publish already happened in this browser session, restore the repo URL.
+                    const existingRepoUrl = sessionStorage.getItem(repoUrlKey);
+                    if (existingRepoUrl) {
+                        setRepoUrl(existingRepoUrl);
+                    }
+                    // Clear params to avoid re-triggering publish on refresh.
+                    navigate('/success', { replace: true });
+                    return;
+                }
+                sessionStorage.setItem(publishGuardKey, '1');
+
+                if (!repoName) {
+                    throw new Error('Missing repo name.');
+                }
+
+                const result = await publishToGithub({ repoName, projectId });
+                setRepoUrl(result.repoUrl);
+                sessionStorage.setItem(repoUrlKey, result.repoUrl);
+            } catch (err) {
+                // Allow retry after a failure.
+                try {
+                    const projectId = projectData?.projectId;
+                    if (projectId) {
+                        sessionStorage.removeItem(`ds_publish_started:${projectId}`);
+                        sessionStorage.removeItem(`ds_repo_url:${projectId}`);
+                    }
+                } catch {
+                    // ignore
+                }
+                setPublishError(err.message || 'Failed to publish to GitHub');
+            } finally {
+                setIsUploading(false);
+                // Clear token from URL to avoid re-publishing on refresh.
+                navigate('/success', { replace: true });
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.search]);
 
     if (!projectData) {
         return (
@@ -52,13 +137,20 @@ export default function DownloadCard({ onDownload }) {
     };
 
     const handleGithubUpload = async () => {
-        setIsUploading(true);
-        // Simulate GitHub upload process
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        setIsUploading(false);
+        setPublishError(null);
+        setRepoUrl(null);
 
-        // In real app, this would create a GitHub repository
-        alert('Repository created successfully on GitHub!');
+        if (!projectData?.projectId) {
+            setPublishError('Missing projectId. Please regenerate the project first.');
+            return;
+        }
+
+        try {
+            const url = buildGithubAuthorizeUrl();
+            window.location.assign(url);
+        } catch (err) {
+            setPublishError(err.message || 'Failed to start GitHub OAuth');
+        }
     };
 
     return (
@@ -140,7 +232,29 @@ export default function DownloadCard({ onDownload }) {
                         <div className="mt-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
                             <p className="text-blue-300 text-sm text-center">
                                 {isDownloading && "Preparing your download..."}
-                                {isUploading && "Creating repository on GitHub..."}
+                                {isUploading && "Publishing to GitHub (this may take a moment)..."}
+                            </p>
+                        </div>
+                    )}
+
+                    {publishError && (
+                        <div className="mt-4 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                            <p className="text-red-300 text-sm text-center">{publishError}</p>
+                        </div>
+                    )}
+
+                    {repoUrl && (
+                        <div className="mt-4 p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                            <p className="text-emerald-200 text-sm text-center">
+                                Published successfully:{' '}
+                                <a
+                                    href={repoUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="underline hover:text-white"
+                                >
+                                    {repoUrl}
+                                </a>
                             </p>
                         </div>
                     )}

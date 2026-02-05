@@ -93,6 +93,8 @@ export default function ProjectInfoForm({ onBack }) {
             // Make API call to backend
             const response = await axios.post("http://localhost:4000/generate", payload, {
                 responseType: "blob", // backend will return .zip file
+                // Security hardening: allow backend to set HttpOnly cookies (browser id binding).
+                withCredentials: true,
             });
 
             // Trigger file download
@@ -101,6 +103,7 @@ export default function ProjectInfoForm({ onBack }) {
             console.log(projectInfo)
 
             const fileCount = response.headers['x-file-count'] || 10;
+            const projectId = response.headers['x-project-id'] || null;
             // We can use the zip size (blob.size) or the uncompressed size from header
             // User asked for "right file size", usually implies the download size, but let's stick to blob size for "download size"
             // or we can show uncompressed. Let's show blob size as it's what they get. 
@@ -110,7 +113,8 @@ export default function ProjectInfoForm({ onBack }) {
                 url: fileUrl,
                 fileName: `${formData.projectName}.zip`,
                 fileSize: `${(blob.size / 1024).toFixed(2)} KB`,
-                filesCount: fileCount
+                filesCount: fileCount,
+                projectId
             });
             navigate("/success");
         } catch (error) {

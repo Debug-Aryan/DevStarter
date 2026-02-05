@@ -8,6 +8,22 @@ const FullStackTSGenerator = require("../generators/FullStackTSGenerator");
 const ReactNativeGenerator = require("../generators/ReactNativeGenerator");
 const path = require("path");
 const fs = require("fs-extra");
+const { randomUUID } = require('crypto');
+const { registerProject } = require('../utils/projectRegistry');
+const { parseCookies, serializeCookie } = require('../utils/cookie');
+
+function isHttps(req) {
+  // Uses req.secure when trust proxy is enabled; otherwise falls back.
+  return Boolean(req.secure || req.protocol === 'https');
+}
+
+function getCookieSameSite() {
+  return process.env.GITHUB_COOKIE_SAMESITE || 'Lax';
+}
+
+function getBrowserIdCookieName() {
+  return process.env.BROWSER_SESSION_COOKIE_NAME || 'ds_browser';
+}
 
 async function safeRemove(targetPath, { attempts = 8, baseDelayMs = 150 } = {}) {
   for (let attempt = 1; attempt <= attempts; attempt++) {
@@ -38,7 +54,10 @@ async function safeUnlink(filePath, { attempts = 6, baseDelayMs = 120 } = {}) {
 
 module.exports = async (req, res) => {
   const { stack, features, projectInfo } = req.body;
-  console.log("Received request:", req.body);
+  // Avoid logging full request payloads in production (may contain user-provided content).
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("Received request:", req.body);
+  }
 
   const finalProjectInfo = projectInfo || {
     name: req.body.projectName,
@@ -47,12 +66,16 @@ module.exports = async (req, res) => {
   };
 
   const projectName = finalProjectInfo.name || 'my-app';
-  const tempDir = path.join(__dirname, "..", "..", "temp_projects");
+  const projectId = randomUUID();
+  const projectContainerPath = path.join(__dirname, "..", "..", "temp_projects", projectId);
+  const tempDir = projectContainerPath;
 
-  const projectTempPath = path.join(tempDir, projectName);
-  if (await fs.pathExists(projectTempPath)) {
+  // Generator writes into tempDir/projectName
+  const projectTempPath = path.join(projectContainerPath, projectName);
+
+  if (await fs.pathExists(projectContainerPath)) {
     try {
-      await safeRemove(projectTempPath);
+      await safeRemove(projectContainerPath);
     } catch (cleanupErr) {
       console.warn("Pre-cleanup warning:", cleanupErr);
     }
@@ -124,9 +147,38 @@ module.exports = async (req, res) => {
     const zipPath = await generator.generate();
     const stats = generator.getProjectStats();
 
+    // Security hardening: bind this generated project to a stable browser id cookie.
+    // This prevents someone with a leaked projectId from publishing under a different session.
+    const cookieName = getBrowserIdCookieName();
+    const cookies = parseCookies(req.headers.cookie);
+    let browserId = cookies[cookieName] || null;
+    if (!browserId) {
+      browserId = randomUUID();
+      const secure = process.env.GITHUB_COOKIE_SECURE === 'true' ? true : isHttps(req);
+      const sameSite = getCookieSameSite();
+      // Long-ish lifetime: used only to bind generated projects to the same browser.
+      res.setHeader('Set-Cookie', serializeCookie(cookieName, encodeURIComponent(browserId), {
+        path: '/',
+        httpOnly: true,
+        sameSite,
+        secure,
+        maxAge: 7 * 24 * 60 * 60,
+      }));
+    }
+
+    // Register for later GitHub publishing.
+    registerProject({
+      projectId,
+      projectContainerPath,
+      projectRootPath: projectTempPath,
+      projectName,
+      browserId,
+    });
+
     res.set('X-File-Count', stats.fileCount.toString());
     res.set('X-Total-Size', stats.totalSize.toString());
-    res.set('Access-Control-Expose-Headers', 'X-File-Count, X-Total-Size');
+    res.set('X-Project-Id', projectId);
+    res.set('Access-Control-Expose-Headers', 'X-File-Count, X-Total-Size, X-Project-Id');
 
     res.download(zipPath, `${projectName}.zip`, (err) => {
       if (err) {
@@ -135,7 +187,6 @@ module.exports = async (req, res) => {
 
       (async () => {
         try {
-          await safeRemove(projectTempPath);
           await safeUnlink(zipPath);
         } catch (cleanupErr) {
           console.error("Cleanup error:", cleanupErr);
