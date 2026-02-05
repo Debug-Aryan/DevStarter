@@ -1,6 +1,8 @@
 import React from 'react';
 import infoSvg from '../../../../assets/features/information-svgrepo-com.svg';
 import GenerateButton from '../../../../components/common/GenerateButton';
+import backSvg from '../../../../assets/back-svgrepo-com.svg';
+import resetSvg from '../../../../assets/reset-svgrepo-com.svg';
 
 export default function FeatureSummary({ features, featureList, onNext, onBack, onReset, onGenerate }) {
     return (
@@ -47,10 +49,67 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <GenerateButton label='Back' className='bg-black hover:bg-gray-800 transition-all' onClick={onBack} />
-                <GenerateButton label="Generate Boilerplate" onClick={onGenerate} />
-                <GenerateButton label='Reset All' className='bg-black hover:bg-red-600 transition-all' onClick={onReset} />
+            <div className="grid grid-cols-[3rem_minmax(0,1fr)_3rem] gap-2 items-center w-full sm:flex sm:flex-row sm:gap-6 sm:justify-center">
+                {/* Mobile: plain buttons */}
+                <button
+                    type="button"
+                    aria-label="Back"
+                    onClick={onBack}
+                    className="sm:hidden w-12 h-12 aspect-square rounded-full shrink-0 grid place-items-center bg-black border border-gray-700 hover:bg-gray-800 transition-all"
+                >
+                    <img
+                        src={backSvg}
+                        alt=""
+                        aria-hidden="true"
+                        draggable="false"
+                        className="h-5 w-5 object-contain filter brightness-0 invert"
+                    />
+                </button>
+
+                {/* Desktop/tablet: GenerateButton */}
+                <div className="hidden sm:block">
+                    <GenerateButton label='Back' className='bg-black hover:bg-gray-800 transition-all' onClick={onBack} />
+                </div>
+
+                {/* Mobile: plain button */}
+                <button
+                    type="button"
+                    onClick={onGenerate}
+                    className="sm:hidden w-full min-w-0 h-12 px-5 bg-[#161B22] border border-gray-700 rounded-full cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl"
+                >
+                    <span className="text-base font-semibold text-gray-200">Generate</span>
+                </button>
+
+                {/* Desktop/tablet: GenerateButton */}
+                <div className="hidden sm:block w-full">
+                    <GenerateButton
+                        label="Generate Boilerplate"
+                        wrapperClassName="p-0 sm:p-4"
+                        className="w-full h-12 sm:h-14"
+                        onClick={onGenerate}
+                    />
+                </div>
+
+                {/* Mobile: plain buttons */}
+                <button
+                    type="button"
+                    aria-label="Reset all"
+                    onClick={onReset}
+                    className="sm:hidden w-12 h-12 aspect-square rounded-full shrink-0 grid place-items-center bg-red-500/20 border border-red-500/30 hover:bg-red-500/30 hover:border-red-500/40 transition-all"
+                >
+                    <img
+                        src={resetSvg}
+                        alt=""
+                        aria-hidden="true"
+                        draggable="false"
+                        className="h-5 w-5 object-contain filter brightness-0 invert"
+                    />
+                </button>
+
+                {/* Desktop/tablet: GenerateButton */}
+                <div className="hidden sm:block">
+                    <GenerateButton label='Reset All' className='bg-black hover:bg-red-600 transition-all' onClick={onReset} />
+                </div>
             </div>
         </div>
     );
