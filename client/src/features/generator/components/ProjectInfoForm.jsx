@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { Navbar, Footer } from '../../../components/layout';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+
 export default function ProjectInfoForm({ onBack }) {
     const [formData, setFormData] = useState({
         projectName: '',
@@ -45,7 +47,7 @@ export default function ProjectInfoForm({ onBack }) {
             case 'description':
                 if (!value.trim()) return 'Project description is required';
                 if (value.length < 10) return 'Description must be at least 10 characters';
-                if (value.length > 200) return 'Description must be less than 200 characters';
+                if (value.length > 1500) return 'Description must be less than 1500 characters';
                 return '';
             default:
                 return '';
@@ -93,7 +95,7 @@ export default function ProjectInfoForm({ onBack }) {
             };
 
             // Make API call to backend
-            const response = await axios.post("http://localhost:4000/generate", payload, {
+            const response = await axios.post(`${API_BASE_URL}/generate`, payload, {
                 responseType: "blob", // backend will return .zip file
                 // Security hardening: allow backend to set HttpOnly cookies (browser id binding).
                 withCredentials: true,
