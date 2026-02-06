@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from 'react';
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Footer } from '../components/layout';
 import { DownloadCard, SuccessMessage, TipsToStart } from '../features/success';
+import { useProject } from "../context/ProjectContext";
 
 
 
@@ -9,7 +10,28 @@ import { DownloadCard, SuccessMessage, TipsToStart } from '../features/success';
 // Main Success Component
 export default function Success() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { generatedFile } = useProject();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const hasGeneratedProject = useMemo(() => {
+    if (generatedFile) return true;
+    try {
+      return Boolean(localStorage.getItem("generatedFile"));
+    } catch {
+      return false;
+    }
+  }, [generatedFile]);
+
+  if (!hasGeneratedProject) {
+    return (
+      <Navigate
+        to="/error/auth"
+        replace
+        state={{ from: location.pathname, errorType: "auth" }}
+      />
+    );
+  }
 
   return (
     <>
