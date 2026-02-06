@@ -1,6 +1,8 @@
 {
     "ignore": [
         "temp/*",
+        "../temp_projects/*",
+        "../temp_projects/**",
         "templates/*",
         "generated/*"
     ],

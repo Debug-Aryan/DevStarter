@@ -7,6 +7,7 @@ const FlaskGenerator = require("../generators/FlaskGenerator");
 const FullStackTSGenerator = require("../generators/FullStackTSGenerator");
 const ReactNativeGenerator = require("../generators/ReactNativeGenerator");
 const path = require("path");
+const os = require('os');
 const fs = require("fs-extra");
 const { randomUUID } = require('crypto');
 const { registerProject } = require('../utils/projectRegistry');
@@ -23,6 +24,21 @@ function getCookieSameSite() {
 
 function getBrowserIdCookieName() {
   return process.env.BROWSER_SESSION_COOKIE_NAME || 'ds_browser';
+}
+
+function getTempProjectsRoot() {
+  // Render (and many hosts) have an ephemeral but writable OS temp directory.
+  // Writing into the repo directory can be undesirable or sometimes blocked.
+  const explicit = process.env.TEMP_PROJECTS_DIR || process.env.TEMP_PROJECTS_ROOT;
+  if (explicit) return path.resolve(String(explicit));
+
+  // Default: OS temp dir (safe in production even if NODE_ENV is unset).
+  // Opt-in for repo-root temp projects (useful for local debugging).
+  if (process.env.TEMP_PROJECTS_IN_REPO === 'true') {
+    return path.resolve(__dirname, '..', '..', 'temp_projects');
+  }
+
+  return path.join(os.tmpdir(), 'devstarter', 'temp_projects');
 }
 
 async function safeRemove(targetPath, { attempts = 8, baseDelayMs = 150 } = {}) {
@@ -67,8 +83,14 @@ module.exports = async (req, res) => {
 
   const projectName = finalProjectInfo.name || 'my-app';
   const projectId = randomUUID();
-  const projectContainerPath = path.join(__dirname, "..", "..", "temp_projects", projectId);
+  const tempProjectsRoot = getTempProjectsRoot();
+  const projectContainerPath = path.join(tempProjectsRoot, projectId);
   const tempDir = projectContainerPath;
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[generate] tempProjectsRoot:', tempProjectsRoot);
+    console.log('[generate] projectContainerPath:', projectContainerPath);
+  }
 
   // Generator writes into tempDir/projectName
   const projectTempPath = path.join(projectContainerPath, projectName);

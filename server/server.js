@@ -12,7 +12,7 @@ const { startCleanupInterval: startGithubSessionCleanup } = require('./utils/git
 dotenv.config();
 
 const app = express();
-const PORT = 4000;
+const PORT = Number(process.env.PORT) || 4000;
 
 // Security hardening:
 // - Avoid trusting X-Forwarded-* unless explicitly configured (for Secure cookies/req.secure).

@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const os = require('os');
 const { githubRequest } = require('../utils/githubApi');
 const { uploadFolderAsSingleCommit } = require('../utils/uploadFolderGitData');
 const { getProject, cleanupProject } = require('../utils/projectRegistry');
@@ -11,8 +12,14 @@ const { getSession: getGithubSession, deleteSession } = require('../utils/github
 const inFlightPublishes = new Map();
 
 function getTempProjectsBase() {
-  // temp_projects is at repo root (sibling of server/)
-  return path.resolve(__dirname, '..', '..', 'temp_projects');
+  const explicit = process.env.TEMP_PROJECTS_DIR || process.env.TEMP_PROJECTS_ROOT;
+  if (explicit) return path.resolve(String(explicit));
+
+  if (process.env.TEMP_PROJECTS_IN_REPO === 'true') {
+    return path.resolve(__dirname, '..', '..', 'temp_projects');
+  }
+
+  return path.join(os.tmpdir(), 'devstarter', 'temp_projects');
 }
 
 function isSubPath(parent, child) {
