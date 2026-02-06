@@ -29,7 +29,27 @@ function getAllowedOrigins() {
   const raw = process.env.CLIENT_ORIGIN || process.env.CLIENT_ORIGINS;
   const clientAppUrl = process.env.CLIENT_APP_URL;
   const baseList = raw ? String(raw).split(',') : [];
-  const list = [...baseList, clientAppUrl].map((s) => (s ? String(s).trim() : '')).filter(Boolean);
+
+  function normalizeToOrigin(value) {
+    if (!value) return '';
+    const trimmed = String(value).trim();
+    if (!trimmed) return '';
+    // If someone provides a full URL (including path/query), normalize to its origin.
+    // This prevents mismatches like "https://app.vercel.app/" vs Origin "https://app.vercel.app".
+    if (trimmed.includes('://')) {
+      try {
+        return new URL(trimmed).origin;
+      } catch {
+        // Fall through to best-effort normalization.
+      }
+    }
+    // Best-effort: remove trailing slashes.
+    return trimmed.replace(/\/+$/, '');
+  }
+
+  const list = [...baseList, clientAppUrl]
+    .map(normalizeToOrigin)
+    .filter(Boolean);
   // Sensible defaults for local dev if nothing was configured.
   if (list.length === 0) {
     list.push('http://localhost:5173');
