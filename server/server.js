@@ -87,10 +87,17 @@ app.use(cors({
 app.options(/.*/, cors({ origin: corsOriginValidator, credentials: true }));
 app.use(bodyParser.json());
 
+// API routes
+// For backwards compatibility we support both unprefixed routes and `/api/*`.
+// This allows Vercel clients to use a stable `/api` prefix while keeping local/dev usage unchanged.
 app.post("/generate", generateRoutes);
+app.post("/api/generate", generateRoutes);
 
 app.use('/auth/github', githubAuthRoutes);
+app.use('/api/auth/github', githubAuthRoutes);
+
 app.post('/publish-github', publishGithub);
+app.post('/api/publish-github', publishGithub);
 
 startCleanupInterval();
 startGithubSessionCleanup();

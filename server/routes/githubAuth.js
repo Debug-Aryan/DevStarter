@@ -65,7 +65,16 @@ function getOauthStateTtlSeconds() {
 function getServerBaseUrl(req) {
   // Prefer explicit public URL in production deployments.
   const explicit = process.env.SERVER_PUBLIC_URL;
-  if (explicit) return String(explicit).replace(/\/$/, '');
+  if (explicit) {
+    const trimmed = String(explicit).trim().replace(/\/$/, '');
+    // Normalize to origin only (strip any accidental path like "/api").
+    // OAuth redirect_uri must match the actual request path; we compute that from req.baseUrl.
+    try {
+      return new URL(trimmed).origin;
+    } catch {
+      return trimmed;
+    }
+  }
   const proto = isHttps(req) ? 'https' : 'http';
   return `${proto}://${req.get('host')}`;
 }
@@ -123,7 +132,8 @@ async function exchangeCodeForToken({ code, redirectUri }) {
 
 // Optional convenience endpoint: server-side redirect to GitHub authorize.
 router.get('/login', (req, res) => {
-  const redirectUri = `${getServerBaseUrl(req)}/auth/github/callback`;
+  // Works for both mounts: `/auth/github` and `/api/auth/github`.
+  const redirectUri = `${getServerBaseUrl(req)}${req.baseUrl}/callback`;
 
   // Security hardening: generate state server-side and store in an HttpOnly cookie.
   // This prevents OAuth CSRF/login-binding attacks.
@@ -172,7 +182,8 @@ router.get('/callback', async (req, res) => {
   const code = req.query.code ? String(req.query.code) : null;
   const returnedState = req.query.state ? String(req.query.state) : null;
   const clientAppUrl = getClientAppUrl();
-  const redirectUri = `${getServerBaseUrl(req)}/auth/github/callback`;
+  // Must match the redirect_uri used in /login.
+  const redirectUri = `${getServerBaseUrl(req)}${req.baseUrl}/callback`;
 
   // Verify OAuth state (CSRF protection).
   const cookies = parseCookies(req.headers.cookie);
