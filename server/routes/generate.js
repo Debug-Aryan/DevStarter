@@ -35,6 +35,13 @@ function getCookieSameSite() {
   return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
+function shouldUsePartitionedCookies({ sameSite } = {}) {
+  const explicit = process.env.GITHUB_COOKIE_PARTITIONED;
+  if (explicit === 'false') return false;
+  if (explicit === 'true') return true;
+  return String(sameSite || '').toLowerCase() === 'none';
+}
+
 function getBrowserIdCookieName() {
   return process.env.BROWSER_SESSION_COOKIE_NAME || 'ds_browser';
 }
@@ -210,12 +217,14 @@ module.exports = async (req, res) => {
       browserId = randomUUID();
       const secure = process.env.GITHUB_COOKIE_SECURE === 'true' ? true : isHttps(req);
       const sameSite = getCookieSameSite();
+      const partitioned = shouldUsePartitionedCookies({ sameSite }) && secure;
       // Long-ish lifetime: used only to bind generated projects to the same browser.
       res.setHeader('Set-Cookie', serializeCookie(cookieName, encodeURIComponent(browserId), {
         path: '/',
         httpOnly: true,
         sameSite,
         secure,
+        partitioned,
         maxAge: 7 * 24 * 60 * 60,
       }));
     }

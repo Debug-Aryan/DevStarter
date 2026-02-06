@@ -78,6 +78,13 @@ function getSameSite() {
   return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
+function shouldUsePartitionedCookies({ sameSite } = {}) {
+  const explicit = process.env.GITHUB_COOKIE_PARTITIONED;
+  if (explicit === 'false') return false;
+  if (explicit === 'true') return true;
+  return String(sameSite || '').toLowerCase() === 'none';
+}
+
 function shortSuffix() {
   return Math.random().toString(36).slice(2, 6);
 }
@@ -173,11 +180,13 @@ async function publishGithub(req, res) {
       // Match normal success behavior: clear cookie even on deduped response.
       const secure = process.env.GITHUB_COOKIE_SECURE === 'true' ? true : isHttps(req);
       const sameSite = getSameSite();
+      const partitioned = shouldUsePartitionedCookies({ sameSite }) && secure;
       res.setHeader('Set-Cookie', serializeCookie(cookieName, '', {
         path: '/',
         httpOnly: true,
         sameSite,
         secure,
+        partitioned,
         maxAge: 0,
       }));
 
@@ -253,6 +262,7 @@ async function publishGithub(req, res) {
         httpOnly: true,
         sameSite,
         secure,
+        partitioned: shouldUsePartitionedCookies({ sameSite }) && secure,
         maxAge: 0,
       }));
 

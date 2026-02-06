@@ -49,6 +49,14 @@ function getSameSite() {
   return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
+function shouldUsePartitionedCookies({ sameSite } = {}) {
+  // Default on when SameSite=None (cross-site). Can be disabled explicitly.
+  const explicit = process.env.GITHUB_COOKIE_PARTITIONED;
+  if (explicit === 'false') return false;
+  if (explicit === 'true') return true;
+  return String(sameSite || '').toLowerCase() === 'none';
+}
+
 function getSessionTtlSeconds() {
   const raw = process.env.GITHUB_SESSION_TTL_MS;
   const parsed = raw ? Number(raw) : NaN;
@@ -146,6 +154,7 @@ router.get('/login', (req, res) => {
 
   const secure = process.env.GITHUB_COOKIE_SECURE === 'true' ? true : isHttps(req);
   const sameSite = getSameSite();
+  const partitioned = shouldUsePartitionedCookies({ sameSite }) && secure;
   const stateCookieName = getOauthStateCookieName();
 
   try {
@@ -158,6 +167,7 @@ router.get('/login', (req, res) => {
         httpOnly: true,
         sameSite,
         secure,
+        partitioned,
         maxAge: 7 * 24 * 60 * 60,
       }),
       serializeCookie(stateCookieName, encodeURIComponent(state), {
@@ -165,6 +175,7 @@ router.get('/login', (req, res) => {
         httpOnly: true,
         sameSite,
         secure,
+        partitioned,
         maxAge: getOauthStateTtlSeconds(),
       }),
     ]);
@@ -191,6 +202,7 @@ router.get('/callback', async (req, res) => {
   const expectedState = cookies[stateCookieName] || null;
   const sameSite = getSameSite();
   const secure = process.env.GITHUB_COOKIE_SECURE === 'true' ? true : isHttps(req);
+  const partitioned = shouldUsePartitionedCookies({ sameSite }) && secure;
 
   // Always clear the state cookie after callback (one-time use).
   const clearStateCookie = serializeCookie(stateCookieName, '', {
@@ -198,6 +210,7 @@ router.get('/callback', async (req, res) => {
     httpOnly: true,
     sameSite,
     secure,
+    partitioned,
     maxAge: 0,
   });
 
@@ -236,6 +249,7 @@ router.get('/callback', async (req, res) => {
         httpOnly: true,
         sameSite,
         secure,
+        partitioned,
         maxAge,
       }),
     ]);

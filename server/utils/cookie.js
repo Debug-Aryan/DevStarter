@@ -23,6 +23,10 @@ function serializeCookie(name, value, options = {}) {
   if (options.httpOnly) parts.push('HttpOnly');
   if (options.secure) parts.push('Secure');
   if (options.sameSite) parts.push(`SameSite=${options.sameSite}`);
+  // CHIPS (Cookies Having Independent Partitioned State)
+  // Allows cross-site cookies in browsers that otherwise block third-party cookies.
+  // Requires: Secure + SameSite=None.
+  if (options.partitioned) parts.push('Partitioned');
   return parts.join('; ');
 }
 
