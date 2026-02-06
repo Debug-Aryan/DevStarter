@@ -122,6 +122,7 @@ module.exports = async (req, res) => {
 
   const projectName = finalProjectInfo.name || 'my-app';
   const projectId = randomUUID();
+  const projectToken = randomUUID();
   const tempProjectsRoot = getTempProjectsRoot();
   const projectContainerPath = path.join(tempProjectsRoot, projectId);
   const tempDir = projectContainerPath;
@@ -236,12 +237,14 @@ module.exports = async (req, res) => {
       projectRootPath: projectTempPath,
       projectName,
       browserId,
+      publishToken: projectToken,
     });
 
     res.set('X-File-Count', stats.fileCount.toString());
     res.set('X-Total-Size', stats.totalSize.toString());
     res.set('X-Project-Id', projectId);
-    res.set('Access-Control-Expose-Headers', 'X-File-Count, X-Total-Size, X-Project-Id');
+    res.set('X-Project-Token', projectToken);
+    res.set('Access-Control-Expose-Headers', 'X-File-Count, X-Total-Size, X-Project-Id, X-Project-Token');
 
     res.download(zipPath, `${projectName}.zip`, (err) => {
       if (err) {

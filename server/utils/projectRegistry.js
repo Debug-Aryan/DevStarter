@@ -15,7 +15,7 @@ function getTtlMs() {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 60 * 60 * 1000; // 1h default
 }
 
-function registerProject({ projectId, projectContainerPath, projectRootPath, projectName, browserId }) {
+function registerProject({ projectId, projectContainerPath, projectRootPath, projectName, browserId, publishToken }) {
   if (!projectId) throw new Error('projectId is required');
   if (!projectContainerPath) throw new Error('projectContainerPath is required');
   if (!projectRootPath) throw new Error('projectRootPath is required');
@@ -27,6 +27,9 @@ function registerProject({ projectId, projectContainerPath, projectRootPath, pro
     projectName,
     // Security hardening: bind project to a browser id (set via HttpOnly cookie).
     browserId: browserId || null,
+    // Production-grade: also bind to a per-project token returned only to the generator caller.
+    // This avoids cross-site cookie partition issues while still preventing random publish attempts.
+    publishToken: publishToken || null,
     createdAtMs: nowMs(),
   });
 

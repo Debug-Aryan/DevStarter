@@ -109,6 +109,7 @@ export default function ProjectInfoForm({ onBack }) {
 
             const fileCount = response.headers['x-file-count'] || 10;
             const projectId = response.headers['x-project-id'] || null;
+            const projectToken = response.headers['x-project-token'] || null;
             // We can use the zip size (blob.size) or the uncompressed size from header
             // User asked for "right file size", usually implies the download size, but let's stick to blob size for "download size"
             // or we can show uncompressed. Let's show blob size as it's what they get. 
@@ -119,7 +120,8 @@ export default function ProjectInfoForm({ onBack }) {
                 fileName: `${formData.projectName}.zip`,
                 fileSize: `${(blob.size / 1024).toFixed(2)} KB`,
                 filesCount: fileCount,
-                projectId
+                projectId,
+                projectToken,
             });
             navigate("/success");
         } catch (error) {

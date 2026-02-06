@@ -74,6 +74,8 @@ export default function DownloadCard({ onDownload }) {
                     throw new Error('Missing projectId. Please regenerate the project and try again.');
                 }
 
+                const projectToken = projectData?.projectToken || null;
+
                 // Extra guard to prevent double publish across remounts (e.g. mobile layout changes).
                 const publishGuardKey = `ds_publish_started:${projectId}`;
                 const repoUrlKey = `ds_repo_url:${projectId}`;
@@ -93,7 +95,7 @@ export default function DownloadCard({ onDownload }) {
                     throw new Error('Missing repo name.');
                 }
 
-                const result = await publishToGithub({ repoName, projectId });
+                const result = await publishToGithub({ repoName, projectId, projectToken });
                 setRepoUrl(result.repoUrl);
                 sessionStorage.setItem(repoUrlKey, result.repoUrl);
             } catch (err) {

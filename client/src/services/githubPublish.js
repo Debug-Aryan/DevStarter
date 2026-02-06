@@ -9,7 +9,7 @@ export function buildGithubAuthorizeUrl({ state } = {}) {
   return `${API_BASE_URL}/auth/github/login`;
 }
 
-export async function publishToGithub({ repoName, projectId }) {
+export async function publishToGithub({ repoName, projectId, projectToken }) {
   let githubSession = null;
   try {
     githubSession = sessionStorage.getItem('ds_github_session') || localStorage.getItem('ds_github_session');
@@ -22,6 +22,7 @@ export async function publishToGithub({ repoName, projectId }) {
     headers: {
       'Content-Type': 'application/json',
       ...(githubSession ? { 'X-DevStarter-Session': githubSession } : {}),
+      ...(projectToken ? { 'X-DevStarter-Project-Token': projectToken } : {}),
     },
     credentials: 'include',
     body: JSON.stringify({ repoName, projectId }),

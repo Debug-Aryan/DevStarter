@@ -82,7 +82,14 @@ app.use(cors({
   origin: corsOriginValidator,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-DevStarter-Session', 'X-DevStarter-Github-Session'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-DevStarter-Session',
+    'X-DevStarter-Github-Session',
+    'X-DevStarter-Project-Token',
+    'X-Project-Token',
+  ],
 }));
 // Ensure preflight requests are answered for all routes.
 app.options(/.*/, cors({ origin: corsOriginValidator, credentials: true }));

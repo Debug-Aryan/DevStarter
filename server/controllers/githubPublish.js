@@ -145,6 +145,12 @@ async function createRepoWithRetry({ token, desiredName }) {
 async function publishGithub(req, res) {
   const { repoName, projectId, projectPath } = req.body || {};
 
+  const providedProjectToken = (
+    req.headers['x-devstarter-project-token'] ||
+    req.headers['x-project-token'] ||
+    null
+  );
+
   const cookieName = process.env.GITHUB_SESSION_COOKIE_NAME || 'gh_session';
   const cookies = parseCookies(req.headers.cookie);
   const headerSession = req.headers['x-devstarter-session'] || req.headers['x-devstarter-github-session'];
@@ -207,15 +213,27 @@ async function publishGithub(req, res) {
     const entry = getProject(String(projectId));
     if (!entry) return res.status(404).json({ error: 'Unknown or expired projectId' });
 
-    // Security hardening: bind project publishing to the same browser that generated it.
-    // Prevents cross-user publishing when projectId leaks.
-    const expectedBrowserId = entry.browserId;
-    const actualBrowserId = session?.browserId || null;
-    if (expectedBrowserId && actualBrowserId && expectedBrowserId !== actualBrowserId) {
-      return res.status(403).json({ error: 'Not authorized to publish this projectId' });
-    }
-    if (expectedBrowserId && !actualBrowserId) {
-      return res.status(401).json({ error: 'GitHub session is not bound to this browser' });
+    // Production-grade binding: prefer per-project token (header-based) because cross-site cookie
+    // partitioning can cause browserId mismatches in Vercel<->Render deployments.
+    const expectedToken = entry.publishToken || null;
+    const token = providedProjectToken ? String(providedProjectToken).trim() : null;
+    if (expectedToken) {
+      if (!token) {
+        return res.status(401).json({ error: 'Missing project token' });
+      }
+      if (token !== expectedToken) {
+        return res.status(403).json({ error: 'Not authorized to publish this projectId' });
+      }
+    } else {
+      // Backwards compatibility: if no token is registered, fall back to browser binding.
+      const expectedBrowserId = entry.browserId;
+      const actualBrowserId = session?.browserId || null;
+      if (expectedBrowserId && actualBrowserId && expectedBrowserId !== actualBrowserId) {
+        return res.status(403).json({ error: 'Not authorized to publish this projectId' });
+      }
+      if (expectedBrowserId && !actualBrowserId) {
+        return res.status(401).json({ error: 'GitHub session is not bound to this browser' });
+      }
     }
 
     localRootPath = entry.projectRootPath;
