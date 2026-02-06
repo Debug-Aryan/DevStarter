@@ -59,11 +59,23 @@ function normalizeRepoName(name) {
 }
 
 function isHttps(req) {
+  const forwardedProto = (req.headers['x-forwarded-proto'] || '').toString().split(',')[0].trim();
+  const forwardedSsl = (req.headers['x-forwarded-ssl'] || '').toString().toLowerCase();
+  if (forwardedProto) return forwardedProto === 'https';
+  if (forwardedSsl) return forwardedSsl === 'on';
   return Boolean(req.secure || req.protocol === 'https');
 }
 
 function getSameSite() {
-  return process.env.GITHUB_COOKIE_SAMESITE || 'Lax';
+  const explicit = process.env.GITHUB_COOKIE_SAMESITE;
+  if (explicit) return explicit;
+
+  const clientAppUrl = process.env.CLIENT_APP_URL || process.env.CLIENT_ORIGIN || '';
+  const isLocalClient = /^(http:\/\/localhost|http:\/\/127\.0\.0\.1|https:\/\/localhost|https:\/\/127\.0\.0\.1)/i.test(clientAppUrl);
+  const isHttpsClient = /^https:\/\//i.test(clientAppUrl);
+  if (isHttpsClient && !isLocalClient) return 'None';
+
+  return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
 function shortSuffix() {

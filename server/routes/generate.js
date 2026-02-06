@@ -15,6 +15,10 @@ const { parseCookies, serializeCookie } = require('../utils/cookie');
 
 function isHttps(req) {
   // Uses req.secure when trust proxy is enabled; otherwise falls back.
+  const forwardedProto = (req.headers['x-forwarded-proto'] || '').toString().split(',')[0].trim();
+  const forwardedSsl = (req.headers['x-forwarded-ssl'] || '').toString().toLowerCase();
+  if (forwardedProto) return forwardedProto === 'https';
+  if (forwardedSsl) return forwardedSsl === 'on';
   return Boolean(req.secure || req.protocol === 'https');
 }
 
@@ -23,6 +27,11 @@ function getCookieSameSite() {
   if (explicit) return explicit;
   // For cross-site SPA deployments (Vercel client + Render API), cookies must be SameSite=None.
   // Keep Lax for local dev (HTTP) to avoid Secure+None requirements.
+  const clientAppUrl = process.env.CLIENT_APP_URL || process.env.CLIENT_ORIGIN || '';
+  const isLocalClient = /^(http:\/\/localhost|http:\/\/127\.0\.0\.1|https:\/\/localhost|https:\/\/127\.0\.0\.1)/i.test(clientAppUrl);
+  const isHttpsClient = /^https:\/\//i.test(clientAppUrl);
+  if (isHttpsClient && !isLocalClient) return 'None';
+
   return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 

@@ -16,7 +16,12 @@ function getClientAppUrl() {
 }
 
 function isHttps(req) {
-  // Hardened: prefer Express' req.secure (requires app.set('trust proxy', 1) behind proxies).
+  // Prefer Express' req.secure (requires app.set('trust proxy', 1) behind proxies).
+  // Also support platforms that always send X-Forwarded-Proto even if trust proxy is mis-set.
+  const forwardedProto = (req.headers['x-forwarded-proto'] || '').toString().split(',')[0].trim();
+  const forwardedSsl = (req.headers['x-forwarded-ssl'] || '').toString().toLowerCase();
+  if (forwardedProto) return forwardedProto === 'https';
+  if (forwardedSsl) return forwardedSsl === 'on';
   return Boolean(req.secure || req.protocol === 'https');
 }
 
@@ -32,6 +37,15 @@ function getSameSite() {
   // Defaults: Lax for localhost dev; for cross-site prod SPA use None + Secure.
   const explicit = process.env.GITHUB_COOKIE_SAMESITE;
   if (explicit) return explicit;
+
+  const clientAppUrl = getClientAppUrl();
+  const isLocalClient = /^(http:\/\/localhost|http:\/\/127\.0\.0\.1|https:\/\/localhost|https:\/\/127\.0\.0\.1)/i.test(clientAppUrl);
+  const isHttpsClient = /^https:\/\//i.test(clientAppUrl);
+
+  // If the client is hosted on HTTPS and not localhost, assume cross-site cookie usage.
+  // This avoids production breakage when NODE_ENV is unset/mis-set.
+  if (isHttpsClient && !isLocalClient) return 'None';
+
   return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
@@ -52,7 +66,8 @@ function getServerBaseUrl(req) {
   // Prefer explicit public URL in production deployments.
   const explicit = process.env.SERVER_PUBLIC_URL;
   if (explicit) return String(explicit).replace(/\/$/, '');
-  return `${req.protocol}://${req.get('host')}`;
+  const proto = isHttps(req) ? 'https' : 'http';
+  return `${proto}://${req.get('host')}`;
 }
 
 function buildAuthorizeUrl({ state, redirectUri }) {

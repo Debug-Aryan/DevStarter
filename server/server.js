@@ -21,7 +21,18 @@ const PORT = Number(process.env.PORT) || 4000;
 // Trusting the first proxy allows Express to correctly detect HTTPS via X-Forwarded-Proto
 // (important for Secure cookies and redirect URLs).
 const trustProxy = process.env.TRUST_PROXY;
-app.set('trust proxy', trustProxy === 'false' ? false : (trustProxy === 'true' || process.env.NODE_ENV === 'production') ? 1 : false);
+const clientAppUrl = process.env.CLIENT_APP_URL || process.env.CLIENT_ORIGIN || '';
+const serverPublicUrl = process.env.SERVER_PUBLIC_URL || '';
+const looksLikeHttpsDeployment = /^https:\/\//i.test(clientAppUrl) || /^https:\/\//i.test(serverPublicUrl);
+
+app.set(
+  'trust proxy',
+  trustProxy === 'false'
+    ? false
+    : (trustProxy === 'true' || process.env.NODE_ENV === 'production' || looksLikeHttpsDeployment)
+      ? 1
+      : false
+);
 app.disable('x-powered-by');
 
 function getAllowedOrigins() {

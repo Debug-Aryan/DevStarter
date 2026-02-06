@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 import { Navbar, Footer } from '../../../components/layout';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:4000');
 
 export default function ProjectInfoForm({ onBack }) {
     const [formData, setFormData] = useState({
