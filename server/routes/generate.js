@@ -34,15 +34,34 @@ function getTempProjectsRoot() {
   // Render (and many hosts) have an ephemeral but writable OS temp directory.
   // Writing into the repo directory can be undesirable or sometimes blocked.
   const explicit = process.env.TEMP_PROJECTS_DIR || process.env.TEMP_PROJECTS_ROOT;
-  if (explicit) return path.resolve(String(explicit));
 
-  // Default: OS temp dir (safe in production even if NODE_ENV is unset).
+  const candidates = [];
+  if (explicit) candidates.push(path.resolve(String(explicit)));
+
   // Opt-in for repo-root temp projects (useful for local debugging).
   if (process.env.TEMP_PROJECTS_IN_REPO === 'true') {
-    return path.resolve(__dirname, '..', '..', 'temp_projects');
+    candidates.push(path.resolve(__dirname, '..', '..', 'temp_projects'));
   }
 
-  return path.join(os.tmpdir(), 'devstarter', 'temp_projects');
+  // Default: OS temp dir (safe in production even if NODE_ENV is unset).
+  candidates.push(path.join(os.tmpdir(), 'devstarter', 'temp_projects'));
+
+  for (const dir of candidates) {
+    try {
+      fs.ensureDirSync(dir);
+      // Verify we can actually write (some platforms allow mkdir but not writes).
+      const probe = path.join(dir, `.write-probe-${randomUUID()}`);
+      fs.writeFileSync(probe, 'ok', 'utf8');
+      fs.unlinkSync(probe);
+      return dir;
+    } catch (err) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[generate] temp dir not writable:', dir, err?.message || err);
+      }
+    }
+  }
+
+  throw new Error('No writable temp directory available. Set TEMP_PROJECTS_DIR to a writable path (recommended: /tmp/devstarter/temp_projects).');
 }
 
 async function safeRemove(targetPath, { attempts = 8, baseDelayMs = 150 } = {}) {

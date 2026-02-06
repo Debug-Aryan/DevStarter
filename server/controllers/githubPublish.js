@@ -13,12 +13,31 @@ const inFlightPublishes = new Map();
 
 function getTempProjectsBase() {
   const explicit = process.env.TEMP_PROJECTS_DIR || process.env.TEMP_PROJECTS_ROOT;
-  if (explicit) return path.resolve(String(explicit));
+
+  const candidates = [];
+  if (explicit) candidates.push(path.resolve(String(explicit)));
 
   if (process.env.TEMP_PROJECTS_IN_REPO === 'true') {
-    return path.resolve(__dirname, '..', '..', 'temp_projects');
+    candidates.push(path.resolve(__dirname, '..', '..', 'temp_projects'));
   }
 
+  candidates.push(path.join(os.tmpdir(), 'devstarter', 'temp_projects'));
+
+  for (const dir of candidates) {
+    try {
+      fs.ensureDirSync(dir);
+      // Basic write probe
+      const probe = path.join(dir, `.write-probe-${Math.random().toString(36).slice(2)}`);
+      fs.writeFileSync(probe, 'ok', 'utf8');
+      fs.unlinkSync(probe);
+      return dir;
+    } catch {
+      // ignore; fall back to next candidate
+    }
+  }
+
+  // Last resort: return os temp dir path even if probe failed (caller may still succeed),
+  // but keep behavior predictable.
   return path.join(os.tmpdir(), 'devstarter', 'temp_projects');
 }
 
