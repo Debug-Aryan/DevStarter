@@ -17,15 +17,23 @@ const PORT = Number(process.env.PORT) || 4000;
 // Security hardening:
 // - Avoid trusting X-Forwarded-* unless explicitly configured (for Secure cookies/req.secure).
 // - Disable x-powered-by to reduce fingerprinting.
-app.set('trust proxy', process.env.TRUST_PROXY === 'true' ? 1 : false);
+// In production (Render/Vercel/etc.), requests typically arrive via a proxy.
+// Trusting the first proxy allows Express to correctly detect HTTPS via X-Forwarded-Proto
+// (important for Secure cookies and redirect URLs).
+const trustProxy = process.env.TRUST_PROXY;
+app.set('trust proxy', trustProxy === 'false' ? false : (trustProxy === 'true' || process.env.NODE_ENV === 'production') ? 1 : false);
 app.disable('x-powered-by');
 
 function getAllowedOrigins() {
   // Lock CORS to configured origins only. Never use wildcard/reflection with credentials.
   const raw = process.env.CLIENT_ORIGIN || process.env.CLIENT_ORIGINS;
-  const list = (raw ? String(raw).split(',') : ['http://localhost:5173'])
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const clientAppUrl = process.env.CLIENT_APP_URL;
+  const baseList = raw ? String(raw).split(',') : [];
+  const list = [...baseList, clientAppUrl].map((s) => (s ? String(s).trim() : '')).filter(Boolean);
+  // Sensible defaults for local dev if nothing was configured.
+  if (list.length === 0) {
+    list.push('http://localhost:5173');
+  }
   return Array.from(new Set(list));
 }
 
@@ -42,7 +50,10 @@ function corsOriginValidator(origin, callback) {
 app.use(cors({
   origin: corsOriginValidator,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }));
+// Ensure preflight requests are answered for all routes.
+app.options(/.*/, cors({ origin: corsOriginValidator, credentials: true }));
 app.use(bodyParser.json());
 
 app.post("/generate", generateRoutes);

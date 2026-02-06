@@ -19,7 +19,11 @@ function isHttps(req) {
 }
 
 function getCookieSameSite() {
-  return process.env.GITHUB_COOKIE_SAMESITE || 'Lax';
+  const explicit = process.env.GITHUB_COOKIE_SAMESITE;
+  if (explicit) return explicit;
+  // For cross-site SPA deployments (Vercel client + Render API), cookies must be SameSite=None.
+  // Keep Lax for local dev (HTTP) to avoid Secure+None requirements.
+  return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
 function getBrowserIdCookieName() {

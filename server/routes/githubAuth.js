@@ -30,7 +30,9 @@ function getOauthStateCookieName() {
 
 function getSameSite() {
   // Defaults: Lax for localhost dev; for cross-site prod SPA use None + Secure.
-  return process.env.GITHUB_COOKIE_SAMESITE || 'Lax';
+  const explicit = process.env.GITHUB_COOKIE_SAMESITE;
+  if (explicit) return explicit;
+  return process.env.NODE_ENV === 'production' ? 'None' : 'Lax';
 }
 
 function getSessionTtlSeconds() {
