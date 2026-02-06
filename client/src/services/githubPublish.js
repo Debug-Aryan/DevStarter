@@ -10,9 +10,19 @@ export function buildGithubAuthorizeUrl({ state } = {}) {
 }
 
 export async function publishToGithub({ repoName, projectId }) {
+  let githubSession = null;
+  try {
+    githubSession = sessionStorage.getItem('ds_github_session') || localStorage.getItem('ds_github_session');
+  } catch {
+    // ignore
+  }
+
   const response = await fetch(`${API_BASE_URL}/publish-github`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(githubSession ? { 'X-DevStarter-Session': githubSession } : {}),
+    },
     credentials: 'include',
     body: JSON.stringify({ repoName, projectId }),
   });

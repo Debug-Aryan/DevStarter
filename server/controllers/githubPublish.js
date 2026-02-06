@@ -147,7 +147,13 @@ async function publishGithub(req, res) {
 
   const cookieName = process.env.GITHUB_SESSION_COOKIE_NAME || 'gh_session';
   const cookies = parseCookies(req.headers.cookie);
-  const sessionId = cookies[cookieName];
+  const headerSession = req.headers['x-devstarter-session'] || req.headers['x-devstarter-github-session'];
+  const authHeader = req.headers.authorization;
+  const bearerSession = authHeader && /^bearer\s+(.+)$/i.test(String(authHeader))
+    ? String(authHeader).replace(/^bearer\s+/i, '').trim()
+    : null;
+
+  const sessionId = cookies[cookieName] || (headerSession ? String(headerSession).trim() : null) || bearerSession;
   const session = getGithubSession(sessionId);
   const token = session?.token || null;
 

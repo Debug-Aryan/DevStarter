@@ -256,6 +256,9 @@ router.get('/callback', async (req, res) => {
 
     const url = new URL('/success', clientAppUrl);
     url.searchParams.set('github_connected', '1');
+    // Fallback for browsers/environments that block third-party cookies in XHR/fetch.
+    // The client can store this and send it back via a header.
+    url.searchParams.set('github_session', sessionId);
     return res.redirect(url.toString());
   } catch (err) {
     const url = new URL('/success', clientAppUrl);

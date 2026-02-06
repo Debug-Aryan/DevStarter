@@ -36,6 +36,18 @@ export default function DownloadCard({ onDownload }) {
         const params = new URLSearchParams(location.search);
         const connected = params.get('github_connected');
         const oauthError = params.get('github_error');
+        const githubSession = params.get('github_session');
+
+        if (githubSession) {
+            try {
+                // Store as a fallback when third-party cookies are blocked.
+                sessionStorage.setItem('ds_github_session', githubSession);
+                // Also mirror into localStorage so refreshes don't lose it.
+                localStorage.setItem('ds_github_session', githubSession);
+            } catch {
+                // ignore
+            }
+        }
 
         if (oauthError) {
             // Security hardening: backend no longer leaks detailed errors in the URL.
