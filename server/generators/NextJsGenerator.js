@@ -27,27 +27,14 @@ class NextJsGenerator extends BaseGenerator {
 
         // a. Auth (NextAuth)
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-            addDeps({
-                "next-auth": "^4.24.5",
-                "bcryptjs": "^2.4.3" // Optional if doing credentials with hash
-            });
-            // We might need to inject SessionProvider into layout, handled via template overlay or placeholders ?
-            // For simplicity, the auth feature template will contain an "app/layout.tsx" that OVERWRITES the base one 
-            // OR we use the strategy of replacing the layout.
-            // Let's assume the auth feature template has a layout that includes the provider.
-            // *Better approach*: Base layout is simple. Auth layout wraps it.
-            // To ensure safe merging, we'll rely on file overwrite for 'app/layout.tsx' if 'auth' feature provides one.
+            // Auth is now included in the Next.js base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // b. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
-            addDevDeps({
-                "tailwindcss": "^3.3.0",
-                "postcss": "^8.4.31",
-                "autoprefixer": "^10.4.16"
-            });
+            // Tailwind is now included in the Next.js base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // c. Docker
@@ -63,7 +50,8 @@ class NextJsGenerator extends BaseGenerator {
 
         // e. Env
         if (this.features.includes('env')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'env'));
+            // .env.example is now included in the Next.js base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // f. GitHub
@@ -73,15 +61,16 @@ class NextJsGenerator extends BaseGenerator {
 
         // g. Readme
         if (this.features.includes('readme')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'readme'));
+            // README.md is now included in the Next.js base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // h. Linting
         if (this.features.includes('linting')) {
             this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'linting'));
             addDevDeps({
-                "eslint": "^8.0.0",
-                "eslint-config-next": "14.0.0", // or match version
+                "eslint": "^9.0.0",
+                "eslint-config-next": "16.1.6",
                 "prettier": "^3.1.0",
                 "eslint-config-prettier": "^9.0.0"
             });
@@ -101,10 +90,20 @@ class NextJsGenerator extends BaseGenerator {
             '__AUTHOR__': this.projectInfo.author || 'DevStarter User'
         };
 
-        if (this.features.includes('readme')) {
-            const featureList = this.features.map(f => `- [x] ${f}`).join('\\n');
-            replacements['__FEATURES_LIST__'] = featureList;
-        }
+        // README exists in the base template, so always replace __FEATURES_LIST__.
+        // Include built-in core features plus any selected optional features.
+        const includedFeatures = Array.from(
+            new Set([
+                'tailwind',
+                'auth',
+                'env',
+                'health',
+                'readme',
+                ...(this.features || [])
+            ])
+        );
+        const featureList = includedFeatures.filter(Boolean).map(f => `- [x] ${f}`).join('\\n');
+        replacements['__FEATURES_LIST__'] = featureList;
 
         this.replacePlaceholders('', replacements);
 

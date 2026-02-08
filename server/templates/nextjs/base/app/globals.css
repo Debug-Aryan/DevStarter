@@ -1,5 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
 body {
-    margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
-    line-height: 1.5;
+    height: 100%;
+}
+
+body {
+    @apply bg-slate-950 text-slate-50 antialiased;
+}
+
+* {
+    @apply border-slate-800;
 }
