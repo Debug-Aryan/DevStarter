@@ -80,7 +80,7 @@ export default function HeroSection() {
                         />
                     </div>
 
-                    <div className="flex flex-row items-center gap-24 justify-center mt-6 mb-12 flex-nowrap pt-10">
+                    <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-24 justify-center mt-6 mb-12 sm:flex-nowrap pt-8">
                         <HeroButton label="Get Started" onClick={() => navigate("/generate")} />
                         <PlayButton
                             ref={viewDemoButtonRef}
