@@ -177,3 +177,12 @@ If you see unstyled pages, confirm:
 - Configure `VITE_API_URL` on the client to match your deployed backend `/api` URL.
 - If you deploy frontend and backend on different domains and need cross-site cookies,
    you may need to adjust CORS and cookie `sameSite/secure` settings in `server/src/utils/token.js`.
+
+## DevStarter Template Note (Important)
+
+Inside the DevStarter codebase you may see a folder like:
+
+- `server/templates/mern/features/`
+
+These are **internal feature blueprints** used by DevStarter when generating projects.
+They are **not intended to be run directly** as standalone apps.

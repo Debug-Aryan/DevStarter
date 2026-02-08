@@ -19,7 +19,7 @@ function health(req, res) {
   const uptimeSeconds = process.uptime();
 
   return sendSuccess(res, {
-    message: 'OK',
+    message: 'Server healthy',
     data: {
       status: 'ok',
       uptime: humanizeSeconds(uptimeSeconds),
