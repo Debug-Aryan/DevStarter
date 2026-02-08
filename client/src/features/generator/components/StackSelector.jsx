@@ -138,8 +138,9 @@ export default function StackSelector({ onNext }) {
 
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white p-8">
-                <div className="max-w-7xl mx-auto">
+            <div className="min-h-screen flex flex-col bg-gradient-to-b from-black to-gray-900 text-white">
+                <div className="flex-1 p-8">
+                    <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
@@ -264,6 +265,7 @@ export default function StackSelector({ onNext }) {
                         <p className="text-gray-400 text-sm">
                             Not sure which stack to choose? All stacks come with authentication, Docker support, and deployment configs.
                         </p>
+                    </div>
                     </div>
                 </div>
                 <Footer />

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Download, Play } from 'lucide-react';
 import Squares from "../../../components/common/Squares";
 import TextType from "../../../components/common/TextType";
-import GenerateButton from "../../../components/common/GenerateButton";
 import DemoVideoModal from "../../../components/common/DemoVideoModal";
+import HeroButton from "../../../components/common/HeroButton";
+import PlayButton from "../../../components/common/PlayButton";
 
 
 export default function HeroSection() {
@@ -29,10 +29,11 @@ export default function HeroSection() {
     const forwardMouseMoveToCanvas = (event) => {
         const canvas = squaresCanvasRef.current;
         if (!canvas) return;
+        if (event.target === canvas) return;
 
         canvas.dispatchEvent(
             new MouseEvent("mousemove", {
-                bubbles: true,
+                bubbles: false,
                 clientX: event.clientX,
                 clientY: event.clientY,
             })
@@ -43,12 +44,12 @@ export default function HeroSection() {
         const canvas = squaresCanvasRef.current;
         if (!canvas) return;
 
-        canvas.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+        canvas.dispatchEvent(new MouseEvent("mouseleave", { bubbles: false }));
     };
 
     return (
         <section
-            className="relative overflow-hidden py-20 min-h-[520px]"
+            className="relative overflow-hidden py-28 min-h-[520px]"
             onMouseMove={forwardMouseMoveToCanvas}
             onMouseLeave={forwardMouseLeaveToCanvas}
         >
@@ -62,28 +63,29 @@ export default function HeroSection() {
                 />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-40">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-30">
                 <div className="text-center max-w-4xl mx-auto">
-                    <TextType
-                        as="div"
-                        text={["Kickstart Your Project in Seconds", "Generate full-stack boilerplates instantly.", "Skip setup. Start building."]}
-                        typingSpeed={75}
-                        initialDelay={10}
-                        deletingSpeed={50}
-                        loop={true}
-                        cursorCharacter="_"
-                        showCursor={true}
-                        cursorBlinkDuration={0.5}
-                        className="text-3xl md:text-6xl font-bold mb-6 bg-white bg-clip-text text-transparent leading-tight md:leading-[1.1] pb-2 min-h-[5rem] md:min-h-[9rem]"
-                    />
+                    <div className="h-[7.5rem] md:h-[11rem] flex items-center justify-center mb-6">
+                        <TextType
+                            as="div"
+                            text={["Kickstart Your Project in Seconds", "Generate full-stack boilerplates instantly.", "Skip setup. Start building."]}
+                            typingSpeed={75}
+                            initialDelay={10}
+                            deletingSpeed={50}
+                            loop={true}
+                            cursorCharacter="_"
+                            showCursor={true}
+                            cursorBlinkDuration={0.5}
+                            className="text-3xl md:text-6xl font-bold bg-white bg-clip-text text-transparent leading-tight md:leading-[1.1] pb-2 overflow-hidden"
+                        />
+                    </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 mb-12">
-                        <GenerateButton onClick={() => navigate("/generate")} />
-                        <GenerateButton
+                    <div className="flex flex-row items-center gap-24 justify-center mt-6 mb-12 flex-nowrap pt-10">
+                        <HeroButton label="Get Started" onClick={() => navigate("/generate")} />
+                        <PlayButton
                             ref={viewDemoButtonRef}
-                            label="View Demo"
+                            label="VIEW DEMO"
                             data-no-loader="true"
-                            className="bg-transparent border border-gray-800 rounded-full hover:bg-white/5 hover:border-gray-600 transition-all duration-300 active:scale-95"
                             onClick={() => setIsDemoOpen(true)}
                         />
                     </div>

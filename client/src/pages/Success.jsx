@@ -35,8 +35,9 @@ export default function Success() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white p-8">
-        <div className="max-w-3xl mx-auto">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-black text-white">
+        <div className="flex-1 p-8">
+          <div className="max-w-3xl mx-auto">
 
           <SuccessMessage
             isVisible={showSuccessMessage}
@@ -72,11 +73,12 @@ export default function Success() {
             <div className="text-center animate-in fade-in-0 duration-700 delay-600">
               <button
                 onClick={() => navigate("/")}
-                className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
+                className="text-gray-400 hover:text-white cursor-pointer transition-colors duration-300 text-sm"
               >
                 ← Generate Another Project
               </button>
             </div>
+          </div>
           </div>
         </div>
         <Footer />

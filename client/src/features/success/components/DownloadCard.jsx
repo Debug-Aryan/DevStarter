@@ -210,7 +210,7 @@ export default function DownloadCard({ onDownload }) {
                             disabled={isDownloading || isUploading}
                             data-no-loader="true"
                             data-no-delay="true"
-                            className="group relative w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-emerald-500 text-slate-900 border border-emerald-200/60 hover:bg-emerald-300 hover:border-emerald-100/80"
+                            className="group relative w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 cursor-pointer active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-emerald-500 text-slate-900 border border-emerald-200/60 hover:bg-emerald-300 hover:border-emerald-100/80"
                         >
                             <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             {isDownloading ? (
@@ -228,7 +228,7 @@ export default function DownloadCard({ onDownload }) {
                             disabled={isUploading || isDownloading}
                             data-no-loader="true"
                             data-no-delay="true"
-                            className="group relative w-full flex items-center justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-gradient-to-r from-[#070a0f] via-[#0f141c] to-[#161B22] text-gray-200 border border-gray-700 hover:border-gray-500/70 hover:from-[#0b1018] hover:to-[#1f2631]"
+                            className="group relative w-full flex items-center cursor-pointer justify-center gap-3 px-6 py-3 rounded-full font-semibold transition-all duration-300 active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 bg-gradient-to-r from-[#070a0f] via-[#0f141c] to-[#161B22] text-gray-200 border border-gray-700 hover:border-gray-500/70 hover:from-[#0b1018] hover:to-[#1f2631]"
                         >
                             <div className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             {isUploading ? (

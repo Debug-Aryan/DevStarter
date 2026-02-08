@@ -174,8 +174,9 @@ export default function ProjectInfoForm({ onBack }) {
 
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white p-8">
-                <div className="max-w-2xl mx-auto">
+            <div className="min-h-screen flex flex-col bg-gradient-to-b from-black to-gray-900 text-white">
+                <div className="flex-1 p-8">
+                    <div className="max-w-2xl mx-auto">
 
                     {/* Header */}
                     <div className="text-center mb-8">
@@ -395,6 +396,7 @@ export default function ProjectInfoForm({ onBack }) {
                                 </p>
                             </div>
                         )}
+                    </div>
                     </div>
                 </div>
                 <Footer />
