@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const healthRoute = require('./health');
-const sampleController = require('../controllers/sampleController');
+const healthRoutes = require('./healthRoutes');
+const authRoutes = require('./authRoutes');
 
-// Health Check
-router.use('/health', healthRoute);
-
-// Sample Route
-router.get('/sample', sampleController.getSample);
+router.use('/health', healthRoutes);
+router.use('/auth', authRoutes);
 
 module.exports = router;
+

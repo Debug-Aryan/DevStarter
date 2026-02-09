@@ -61,8 +61,7 @@ class NextJsGenerator extends BaseGenerator {
 
         // g. Readme
         if (this.features.includes('readme')) {
-            // README.md is now included in the Next.js base template.
-            // Keeping the feature flag for backward compatibility.
+            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'readme'));
         }
 
         // h. Linting

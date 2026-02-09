@@ -27,11 +27,8 @@ class NodeExpressGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-            addServerDeps({
-                "bcryptjs": "^2.4.3",
-                "jsonwebtoken": "^9.0.2"
-            });
+             // Auth is now included in the Node.js + Express base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // b. Docker
@@ -46,7 +43,8 @@ class NodeExpressGenerator extends BaseGenerator {
 
         // d. Env
         if (this.features.includes('env')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'env'));
+            // .env.example is now included in the Node.js + Express base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // e. Deployment
