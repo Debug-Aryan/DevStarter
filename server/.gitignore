@@ -33,3 +33,40 @@ venv.bak/
 db.sqlite3
 db.sqlite3-journal
 .DS_Store
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+*.class
+*.jar
+
+.idea/
+.vscode/
+*.iml
+.DS_Store
+.classpath
+.project
+.settings/
+.env
+
+### STS ###
+.apt_generated
+.factorypath
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/

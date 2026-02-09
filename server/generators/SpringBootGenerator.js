@@ -11,6 +11,18 @@ class SpringBootGenerator extends BaseGenerator {
         this.properties = '';
     }
 
+    copyFeatureFolder(featureName, folderName = featureName) {
+        const featurePath = path.join(this.templatesPath, 'features', folderName);
+        if (fs.existsSync(featurePath)) {
+            this.copyTemplateFolder(featurePath);
+            return true;
+        }
+
+        // Feature selected in UI but no corresponding template exists.
+        // Skipping to avoid generator crashes.
+        return false;
+    }
+
     async generate() {
         console.log(`Generating Spring Boot project: ${this.projectName}`);
         console.log(`Detected features:`, this.features);
@@ -23,61 +35,37 @@ class SpringBootGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-
-            // Queue dependencies injection
-            const depsPath = path.join(this.templatesPath, 'features', 'auth', 'dependencies.xml');
-            if (fs.existsSync(depsPath)) {
-                const depsContent = fs.readFileSync(depsPath, 'utf8');
-                this.injectPomDependencies(depsContent);
-                // Remove the fragment file from the target if it was copied
-                const targetDeps = path.join(this.projectPath, 'dependencies.xml');
-                try {
-                    if (fs.existsSync(targetDeps)) fs.unlinkSync(targetDeps);
-                } catch (e) {
-                    console.error('Failed to unlink dependencies.xml', e);
-                }
-            }
-
-            // Queue application.properties
-            this.appendProperties(`
-# JWT Configuration
-jwt.secret=\${JWT_SECRET:changeme}
-jwt.expiration=86400000
-`);
+             // Auth is now included in the Spring Boot base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // b. Docker
         if (this.features.includes('docker')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'docker'));
+            // Docker support is provided via the docker feature templates.
+            // If templates are missing, skip (backward compatibility / no crash).
+            this.copyFeatureFolder('docker');
         }
 
         // c. Github
         if (this.features.includes('github')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'github'));
+            this.copyFeatureFolder('github');
         }
 
         // d. Env
         if (this.features.includes('env')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'env'));
-
-            this.appendProperties(`
-# Environment Variable Mappings
-server.port=\${SERVER_PORT:8080}
-spring.datasource.url=\${DB_URL}
-spring.datasource.username=\${DB_USERNAME}
-spring.datasource.password=\${DB_PASSWORD}
-`);
+            // Base template already reads environment variables from application.properties.
+            // Keep this feature for providing extra env files (like .env.example) if present.
+            this.copyFeatureFolder('env');
         }
 
         // e. Deployment
         if (this.features.includes('deployment')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'deployment'));
+            this.copyFeatureFolder('deployment');
         }
 
         // f. Linting
         if (this.features.includes('linting')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'linting'));
+            this.copyFeatureFolder('linting');
 
             this.injectPomPlugins(`
             <plugin>
@@ -105,12 +93,14 @@ spring.datasource.password=\${DB_PASSWORD}
 
         // g. Readme
         if (this.features.includes('readme')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'readme'));
+            // README is provided via feature templates.
+            // If templates are missing, skip to avoid generator crashes.
+            this.copyFeatureFolder('readme');
         }
 
         // h. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
+            // Tailwind is primarily a frontend concern. For a Spring Boot backend, this feature may not be applicable.
         }
 
         // 3. Finalize File Changes (Single Write Operation)

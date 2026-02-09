@@ -1,11 +1,19 @@
 services:
   - type: web
     name: devstarter-spring-boot
-    env: docker
+    env: java
     plan: free
-    dockerContext: .
+    buildCommand: mvn clean package
+    startCommand: java -Dserver.port=$PORT -jar target/app.jar
     envVars:
-      - key: SERVER_PORT
-        value: 8080
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "86400000"
+      # Optional database env vars (provide if you use an external DB)
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
