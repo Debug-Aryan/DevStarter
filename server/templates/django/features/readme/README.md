@@ -1,50 +1,133 @@
-# __PROJECT_NAME__
+# DevStarter Django (Base Template)
 
-__PROJECT_DESCRIPTION__
+This is the **Django backend base template** used by DevStarter.
+It is designed to be:
 
-## Stack
-- Python 3.12+
-- Django 5
-- Gunicorn
+- Production-ready (Render / Docker)
+- Beginner-friendly (simple structure, clear defaults)
+- Auth-capable (Django built-in auth)
+- Tailwind-styled (no unstyled pages)
 
-## Features
-__FEATURES_LIST__
+## Architecture (Plain Django, no DRF)
 
-## Setup
+- **Django templates (HTML)** for pages
+- **Django built-in auth** for login/register/logout
+- **Whitenoise** for static files in production
+- **`DATABASE_URL` support** for Postgres on deployment
 
-1. **Clone the repository:**
-   \`\`\`bash
-   git clone <repo_url>
-   cd <project_name>
-   \`\`\`
+## Folder structure
 
-2. **Create a virtual environment:**
-   \`\`\`bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   \`\`\`
+```
+base/
+  core/                 # Project config (settings/urls/asgi/wsgi)
+  main/                 # Main app (views, urls, templates, static)
+    templates/
+      base.html
+      main/
+        home.html
+        dashboard.html
+      registration/
+        login.html
+        register.html
+    static/
+      css/
+        style.css
+  manage.py
+  requirements.txt
+  .env.example
+  Procfile
+  render.yaml
+  Dockerfile
+  docker-compose.yml
+```
 
-3. **Install dependencies:**
-   \`\`\`bash
-   pip install -r requirements.txt
-   \`\`\`
+## Run locally
 
-4. **Environment Variables:**
-   Copy \`.env.example\` to \`.env\` and update values.
+1) Create a virtualenv and install deps:
 
-5. **Run Migrations:**
-   \`\`\`bash
-   python manage.py migrate
-   \`\`\`
+```bash
+pip install -r requirements.txt
+```
 
-6. **Start Developer Server:**
-   \`\`\`bash
-   python manage.py runserver
-   \`\`\`
+2) (Optional) Create a `.env` file:
 
-## Docker
+- Copy `.env.example` to `.env`
+- Keep `DEBUG=True` for local development
 
-If using Docker:
-\`\`\`bash
-docker-compose up --build
-\`\`\`
+3) Run migrations (required for auth):
+
+```bash
+python manage.py migrate
+```
+
+4) Start the dev server:
+
+```bash
+python manage.py runserver
+```
+
+Open: `http://127.0.0.1:8000/`
+
+## Auth flow (built-in Django auth)
+
+Routes:
+
+- `GET /accounts/login/` → login
+- `GET /accounts/register/` → register
+- `POST /accounts/logout/` → logout
+- `GET /dashboard/` → protected page (requires login)
+
+Implementation:
+
+- Login/Logout: Django’s built-in auth views
+- Register: `UserCreationForm` (password hashing handled by Django)
+- Protected pages: `LoginRequiredMixin`
+
+## Tailwind CSS integration
+
+Tailwind must be available at:
+
+- `main/static/css/style.css`
+
+For a **fresh clone that runs instantly**, this template uses a **precompiled Tailwind CSS import** in that file.
+All pages are styled using Tailwind utility classes and the shared layout in `base.html`.
+
+## Environment variables
+
+See `.env.example`:
+
+- `DEBUG` – debug mode
+- `SECRET_KEY` – Django secret key (required in production)
+- `ALLOWED_HOSTS` – comma-separated hostnames
+- `DATABASE_URL` – optional; if set, used for Postgres/etc
+
+## Deployment
+
+### Render
+
+- Use `render.yaml` or create a new Render Web Service.
+- Ensure env vars are set:
+  - `DEBUG=False`
+  - `SECRET_KEY` (Render can generate this)
+  - `ALLOWED_HOSTS=.onrender.com` (or your custom domain)
+  - `DATABASE_URL` (if you attach a Postgres database)
+
+### Docker
+
+Build + run:
+
+```bash
+docker compose up --build
+```
+
+For production Docker images, prefer:
+
+- `python manage.py migrate`
+- `python manage.py collectstatic --noinput`
+- Run via `gunicorn`
+
+## DevStarter features (important)
+
+The folders under `server/templates/django/features/` are **DevStarter internal blueprints**.
+They are **not meant to be run directly**.
+DevStarter injects selected feature folders into `base/` when generating a new project.

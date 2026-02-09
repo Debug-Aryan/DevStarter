@@ -1,0 +1,15 @@
+/*
+  Tailwind CSS (zero-build):
+  We load Tailwind's precompiled CSS via @import so a fresh clone can run immediately
+  without a Node/Tailwind build step.
+
+  If you later add a Tailwind build pipeline, replace this file content with your
+  compiled output (and keep the same path).
+*/
+
+@import url("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css");
+
+/* Small, project-specific tweaks */
+html {
+  scroll-behavior: smooth;
+}

@@ -24,7 +24,8 @@ class DjangoGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
+            //  // Auth is now included in the Django base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.    
         }
 
         // b. Docker
@@ -35,7 +36,8 @@ class DjangoGenerator extends BaseGenerator {
 
         // c. Env
         if (this.features.includes('env')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'env'));
+            // Env is now included in the Django base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // d. Github
@@ -61,7 +63,8 @@ class DjangoGenerator extends BaseGenerator {
 
         // h. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
+            // Tailwind is now included in the Django base template.
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // 3. Write merged requirements.txt
