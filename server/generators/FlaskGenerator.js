@@ -21,8 +21,8 @@ class FlaskGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-            this.addRequirementsFromFile(path.join(this.templatesPath, 'features', 'auth', 'requirements.txt'), requirements);
+            // Auth is now included in the MERN base template (server + client)
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // b. Docker
@@ -58,7 +58,8 @@ class FlaskGenerator extends BaseGenerator {
 
         // h. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
+            // Tailwind is a frontend CSS framework and is not applicable to a Flask backend project.
+            // Keeping the feature flag for backward compatibility with existing UI selections, but no action is taken here.
         }
 
         // 3. Write merged requirements.txt
