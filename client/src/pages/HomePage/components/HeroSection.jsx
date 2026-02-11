@@ -49,7 +49,7 @@ export default function HeroSection() {
 
     return (
         <section
-            className="relative overflow-hidden py-28 min-h-[520px]"
+            className="relative overflow-hidden py-32 min-h-[520px]"
             onMouseMove={forwardMouseMoveToCanvas}
             onMouseLeave={forwardMouseLeaveToCanvas}
         >
@@ -80,7 +80,7 @@ export default function HeroSection() {
                         />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-24 justify-center mt-6 mb-12 sm:flex-nowrap pt-8">
+                    <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-24 justify-center mt-6 mb-12 sm:flex-nowrap pt-10">
                         <HeroButton label="Get Started" onClick={() => navigate("/generate")} />
                         <PlayButton
                             ref={viewDemoButtonRef}
