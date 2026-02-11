@@ -1,8 +1,12 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
-dotenv.config();
+export async function connectDb() {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    throw new Error('MONGO_URI is missing. Set it in server/.env (see .env.example).');
+  }
 
-export const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
+  await mongoose.connect(mongoUri);
+  // eslint-disable-next-line no-console
+  console.log('✅ MongoDB connected');
+}

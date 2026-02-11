@@ -1,23 +1,26 @@
-# Build stage
-FROM node:18-alpine as builder
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package.json package-lock.json* ./
+RUN npm ci
 
-COPY . .
+COPY tsconfig.json ./
+COPY src ./src
+
 RUN npm run build
 
-# Production stage
-FROM node:18-alpine
 
+FROM node:20-alpine
+
+ENV NODE_ENV=production
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --only=production
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
 
-COPY --from=builder /app/dist ./dist
+COPY --from=build /app/dist ./dist
 
 EXPOSE 5000
-CMD ["npm", "start"]
+
+CMD ["node", "dist/index.js"]

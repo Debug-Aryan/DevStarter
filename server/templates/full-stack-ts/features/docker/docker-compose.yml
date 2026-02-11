@@ -1,39 +1,31 @@
-version: '3.8'
-
 services:
   server:
     build: ./server
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: ${MONGO_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      CLIENT_URL: ${CLIENT_URL}
     ports:
       - "5000:5000"
-    environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/myapp
-      - JWT_SECRET=secret
-      - PORT=5000
     depends_on:
-      - postgres
+      - mongo
 
   client:
-    build: 
-      context: ./client
-      dockerfile: Dockerfile
+    build: ./client
     ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:5000
-    volumes:
-      - ./client:/app
-      - /app/node_modules
+      - "3000:80"
+    depends_on:
+      - server
 
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: myapp
+  mongo:
+    image: mongo:7
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
 volumes:
-  postgres_data:
+  mongo_data:

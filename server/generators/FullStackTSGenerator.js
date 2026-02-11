@@ -35,18 +35,9 @@ class FullStackTSGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-            addServerDeps({
-                "bcryptjs": "^2.4.3",
-                "jsonwebtoken": "^9.0.2"
-            });
-            addServerDevDeps({
-                "@types/bcryptjs": "^2.4.6",
-                "@types/jsonwebtoken": "^9.0.5"
-            });
-            addClientDeps({
-                "axios": "^1.6.2" // Assuming auth template uses axios
-            });
+            // // Auth is now included in the Full-Stack TS base template (server + client)
+        // Keeping the feature flag for backward compatibility with existing UI selections.
+    
         }
 
         // b. Docker
@@ -99,12 +90,8 @@ class FullStackTSGenerator extends BaseGenerator {
 
         // h. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
-            addClientDevDeps({
-                "tailwindcss": "^3.3.6",
-                "postcss": "^8.4.32",
-                "autoprefixer": "^10.4.16"
-            });
+            // Tailwind is now included in the Full-Stack TS base template (client only)
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // 3. Update package.jsons with gathered deps
