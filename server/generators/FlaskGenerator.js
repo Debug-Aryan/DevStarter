@@ -21,7 +21,7 @@ class FlaskGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            // Auth is now included in the MERN base template (server + client)
+            // Auth is now included in the Flask base template (server + client)
             // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
