@@ -55,9 +55,8 @@ class ReactNativeGenerator extends BaseGenerator {
 
         // a. Auth
         if (this.features.includes('auth')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'auth'));
-            // Add dependencies if any (none specified in prompt, but maybe navigation?)
-            // Prompt says: "Update RootNavigator.js to include Login and Register screens... Use existing feature templates... adapt to JS"
+            // Auth is now included in the React Native base template (server + client)
+            // Keeping the feature flag for backward compatibility with existing UI selections.
         }
 
         // b. Docker
@@ -72,7 +71,8 @@ class ReactNativeGenerator extends BaseGenerator {
 
         // d. Env
         if (this.features.includes('env')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'env'));
+            // .env.example is now included in the React Native base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // e. Deployment
@@ -101,11 +101,8 @@ class ReactNativeGenerator extends BaseGenerator {
 
         // h. Tailwind
         if (this.features.includes('tailwind')) {
-            this.copyTemplateFolder(path.join(this.templatesPath, 'features', 'tailwind'));
-            addClientDeps({
-                "nativewind": "^2.0.11",
-                "tailwindcss": "^3.3.2"
-            });
+            // Tailwind is now included in the Next.js base template.
+            // Keeping the feature flag for backward compatibility.
         }
 
         // 3. Update package.json

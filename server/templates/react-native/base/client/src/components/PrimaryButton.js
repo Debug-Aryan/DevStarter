@@ -1,25 +1,20 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Pressable, ActivityIndicator, Text } from 'react-native';
 
-export default function PrimaryButton({ onPress, title }) {
+export default function PrimaryButton({ onPress, title, disabled = false, loading = false }) {
+    const isDisabled = disabled || loading;
+
     return (
-        <TouchableOpacity onPress={onPress} style={styles.button}>
-            <Text style={styles.text}>{title}</Text>
-        </TouchableOpacity>
+        <Pressable
+            onPress={onPress}
+            disabled={isDisabled}
+            className={`h-12 w-full flex-row items-center justify-center rounded-xl bg-blue-600 ${isDisabled ? 'opacity-60' : ''}`}
+        >
+            {loading ? (
+                <ActivityIndicator color="#fff" />
+            ) : (
+                <Text className="text-base font-semibold text-white">{title}</Text>
+            )}
+        </Pressable>
     );
 }
-
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: '#007AFF',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    text: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '600',
-    },
-});
