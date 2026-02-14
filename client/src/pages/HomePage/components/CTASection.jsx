@@ -11,7 +11,7 @@ export default function CTASection() {
                 <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-600 p-12">
                     <h2 className="text-4xl md:text-5xl font-bold mb-6">Start Building in Seconds</h2>
                     <p className="text-xl text-gray-300 mb-8">
-                        Join thousands of developers who've accelerated their workflow with DevStarter
+                        Generate production-ready starters and focus on building, not setup.
                     </p>
                     <GenerateButton onClick={() => navigate("/generate")} />
                     <p className="text-gray-400 mt-4">No signup required • Free forever • Open source</p>
