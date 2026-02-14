@@ -3,7 +3,6 @@ import HeroSection from './components/HeroSection';
 import FeaturesSection from './components/FeaturesSection';
 import HowItWorksSection from './components/HowItWorksSection';
 import CodePreviewSection from './components/CodePreviewSection';
-import TestimonialsSection from './components/TestimonialsSection';
 import CTASection from './components/CTASection';
 
 export default function DevStarterLanding() {
@@ -15,7 +14,6 @@ export default function DevStarterLanding() {
                 <FeaturesSection />
                 <HowItWorksSection />
                 <CodePreviewSection />
-                <TestimonialsSection />
                 <CTASection />
                 <Footer />
             </div>
