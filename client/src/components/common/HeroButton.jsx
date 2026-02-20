@@ -49,7 +49,6 @@ const StyledWrapper = styled.div`
     font-weight: 600;
     color: #ddebf0;
     box-shadow: 0 0 0 2px #2761c3;
-    cursor: pointer;
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   }

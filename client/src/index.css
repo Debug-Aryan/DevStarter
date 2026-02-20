@@ -10,7 +10,9 @@ html {
 
 	--font-brand: "Orbitron", var(--font-sans);
 }
-
+* {
+  cursor: none !important;
+}
 html,
 body {
   font-family: var(--font-sans);
@@ -53,4 +55,5 @@ select {
   .themed-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(148, 163, 184, 0.75);
   }
+
 }

@@ -30,7 +30,7 @@ const GenerateButton = React.forwardRef(({
         disabled={disabled}
         aria-label={effectiveAriaLabel}
         {...buttonProps}
-        className={`group relative flex items-center gap-2 sm:gap-3 px-5 py-3 sm:px-8 sm:py-4 bg-[#161B22] border border-gray-700 rounded-full cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 ${mobileIconOnly ? 'gap-0 sm:gap-3' : ''} ${className}`}
+        className={`group relative flex items-center gap-2 sm:gap-3 px-5 py-3 sm:px-8 sm:py-4 bg-[#161B22] border border-gray-700 rounded-full transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 ${mobileIconOnly ? 'gap-0 sm:gap-3' : ''} ${className}`}
       >
         {/* Subtle Background Glow on Hover */}
         <div className="absolute inset-0 rounded-full bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

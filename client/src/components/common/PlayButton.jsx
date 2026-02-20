@@ -42,7 +42,6 @@ const StyledWrapper = styled.div`
     font-size: 13px;
     font-weight: bold;
     color: #ddebf0;
-    cursor: pointer;
   }
 
   #clip {

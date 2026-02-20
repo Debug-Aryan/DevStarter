@@ -5,7 +5,7 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
     return (
         <div
             className={`
-        relative group cursor-pointer transition-all duration-300 transform hover:scale-105
+        relative group transition-all duration-300 transform hover:scale-105
         ${isEnabled ? 'scale-105' : ''}
       `}
             onClick={() => toggleFeature(feature.id)}
@@ -69,8 +69,8 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
                         {isEnabled ? 'Enabled' : 'Disabled'}
                     </span>
 
-                    <div className={`
-            relative w-12 h-6 rounded-full transition-all duration-300 cursor-pointer
+                        <div className={`
+                    relative w-12 h-6 rounded-full transition-all duration-300
             ${isEnabled
                             ? 'bg-green-700'
                             : 'bg-gray-600'

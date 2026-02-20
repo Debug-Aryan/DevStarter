@@ -337,7 +337,7 @@ export default function ProjectInfoForm({ onBack }) {
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={!isFormValid() || isSubmitting}
-                                className="sm:hidden w-full min-w-0 h-12 px-5 bg-[#161B22] border border-gray-700 rounded-full cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
+                                className="sm:hidden w-full min-w-0 h-12 px-5 bg-[#161B22] border border-gray-700 rounded-full transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
                             >
                                 <span className="text-base font-semibold text-gray-200">Create Project</span>
                             </button>

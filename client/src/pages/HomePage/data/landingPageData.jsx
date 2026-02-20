@@ -51,23 +51,3 @@ export const steps = [
     }
 ];
 
-export const testimonials = [
-    {
-        name: "Alex Chen",
-        role: "Full Stack Developer",
-        avatar: "AC",
-        quote: "Saved me hours every time I started a new project! The boilerplates are production-ready."
-    },
-    {
-        name: "Sarah Kim",
-        role: "Startup Founder",
-        avatar: "SK",
-        quote: "DevStarter helped me launch my MVP 3x faster. The auth setup alone saved me days."
-    },
-    {
-        name: "Marcus Rodriguez",
-        role: "Senior Engineer",
-        avatar: "MR",
-        quote: "Clean, well-structured code that follows industry best practices. Highly recommended!"
-    }
-];

@@ -126,7 +126,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
               <button
                 onClick={onClose}
                 data-no-loader="true"
-                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-black/50 text-white/70 hover:text-white hover:bg-red-600 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-white/20"
+                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-black/50 text-white/70 hover:text-white hover:bg-red-600 transition-all focus:outline-none focus:ring-2 focus:ring-white/20"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5 transition-transform group-hover:rotate-90" />

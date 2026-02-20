@@ -80,7 +80,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between py-3">
             
             {/* Logo/Brand */}
-            <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => navigate('/')}>
+            <div className="flex items-center space-x-3 group" onClick={() => navigate('/')}>
               <div className="relative">
                 <div className="bg-white/5 rounded-full flex items-center justify-center transform transition-transform duration-0 ease-in-out group-hover:duration-700 group-hover:rotate-[720deg]">
                   <img
@@ -127,7 +127,7 @@ export default function Navbar() {
               {/* Desktop CTA */}
               <div className="hidden md:block">
                 <button 
-                  className="group relative overflow-hidden px-5 py-2 rounded-full text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95 cursor-pointer"
+                  className="group relative overflow-hidden px-5 py-2 rounded-full text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95"
                   onClick={() => navigate("/generate")}
                 >
                   <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -191,7 +191,7 @@ export default function Navbar() {
 
                 <div className="pt-4">
                   <button 
-                    className="group relative w-full overflow-hidden px-4 py-3 rounded-xl text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95 cursor-pointer"
+                    className="group relative w-full overflow-hidden px-4 py-3 rounded-xl text-sm font-semibold text-gray-200 bg-[#161B22] border border-gray-700 shadow-xl transition-all duration-300 hover:bg-[#1f2631] hover:border-blue-500/50 active:scale-95"
                     onClick={() => {
                       closeMenu();
                       navigate("/generate");

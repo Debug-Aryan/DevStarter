@@ -73,7 +73,7 @@ export default function Success() {
             <div className="text-center animate-in fade-in-0 duration-700 delay-600">
               <button
                 onClick={() => navigate("/")}
-                className="text-gray-400 hover:text-white cursor-pointer transition-colors duration-300 text-sm"
+                className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
               >
                 ← Generate Another Project
               </button>

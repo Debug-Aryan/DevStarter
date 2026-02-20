@@ -161,7 +161,7 @@ export default function StackSelector({ onNext }) {
                                     key={stack.id}
                                     onClick={() => handleStackSelect(stack.id)}
                                     className={`
-                  relative cursor-pointer group transition-all duration-300 transform hover:scale-105
+                                    relative group transition-all duration-300 transform hover:scale-105
                   ${isSelected ? 'scale-105' : ''}
                 `}
                                 >

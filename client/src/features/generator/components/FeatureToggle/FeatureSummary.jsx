@@ -75,7 +75,7 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
                 <button
                     type="button"
                     onClick={onGenerate}
-                    className="sm:hidden w-full min-w-0 h-12 px-5 bg-[#161B22] border border-gray-700 rounded-full cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl"
+                    className="sm:hidden w-full min-w-0 h-12 px-5 bg-[#161B22] border border-gray-700 rounded-full transition-all duration-300 hover:border-blue-500/50 hover:bg-[#1f2631] active:scale-95 shadow-xl"
                 >
                     <span className="text-base font-semibold text-gray-200">Generate</span>
                 </button>
