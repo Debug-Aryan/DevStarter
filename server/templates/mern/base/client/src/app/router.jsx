@@ -17,7 +17,7 @@ function ProtectedRoute({ children }) {
     return (
       <div className="px-4 py-12">
         <div className="mx-auto max-w-6xl">
-          <div className="card">Loading session…</div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm">Loading session…</div>
         </div>
       </div>
     );

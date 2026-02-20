@@ -49,10 +49,10 @@ export default function LoginPage() {
         >
           <form className="space-y-4" onSubmit={onSubmit}>
             <div>
-              <label className="label" htmlFor="email">Email</label>
+              <label className="text-sm font-medium text-slate-200" htmlFor="email">Email</label>
               <input
                 id="email"
-                className="input mt-1"
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/30 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 mt-1"
                 type="email"
                 autoComplete="email"
                 value={email}
@@ -63,10 +63,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="label" htmlFor="password">Password</label>
+              <label className="text-sm font-medium text-slate-200" htmlFor="password">Password</label>
               <input
                 id="password"
-                className="input mt-1"
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/30 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 mt-1"
                 type="password"
                 autoComplete="current-password"
                 value={password}
@@ -78,7 +78,7 @@ export default function LoginPage() {
 
             <ErrorMessage message={error} />
 
-            <button className="btn-primary w-full" type="submit" disabled={isSubmitting}>
+            <button className="btn bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-500/90 w-full" type="submit" disabled={isSubmitting}>
               {isSubmitting ? <Loader label="Signing in" /> : 'Sign in'}
             </button>
           </form>

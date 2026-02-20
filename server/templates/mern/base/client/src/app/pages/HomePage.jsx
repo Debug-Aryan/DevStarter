@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <div className="px-4 py-12">
       <div className="mx-auto max-w-5xl">
-        <div className="card overflow-hidden">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/30 p-6 shadow-sm overflow-hidden">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-semibold text-indigo-300">__PROJECT_NAME__</p>
@@ -25,8 +25,8 @@ export default function HomePage() {
                   <Link className="btn-primary" to="/dashboard">Go to dashboard</Link>
                 ) : (
                   <>
-                    <Link className="btn-primary" to="/register">Get started</Link>
-                    <Link className="btn-ghost" to="/login">Sign in</Link>
+                    <Link className="btn bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-500/90" to="/register">Get started</Link>
+                    <Link className="btn border border-slate-700 bg-transparent text-slate-100 hover:bg-slate-800" to="/login">Sign in</Link>
                   </>
                 )}
               </div>

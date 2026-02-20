@@ -34,7 +34,7 @@ export default function AppShell() {
                 <NavLink to="/dashboard" className={navLinkClass}>
                   Dashboard
                 </NavLink>
-                <button className="btn-ghost" type="button" onClick={onLogout}>
+                <button className="btn border border-slate-700 bg-transparent text-slate-100 hover:bg-slate-800" type="button" onClick={onLogout}>
                   Logout
                 </button>
               </>

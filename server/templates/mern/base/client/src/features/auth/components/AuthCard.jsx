@@ -3,7 +3,7 @@ import React from 'react';
 export default function AuthCard({ title, subtitle, children, footer }) {
   return (
     <div className="w-full max-w-md">
-      <div className="card">
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-sm">
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-white">{title}</h1>
           {subtitle ? (
