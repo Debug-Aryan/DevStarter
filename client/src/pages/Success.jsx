@@ -42,7 +42,6 @@ export default function Success() {
           {showSuccessMessage && (
             <SuccessMessage
               title="Download Complete"
-              message="Your DevStarter project is ready. Happy coding 🚀"
               onClose={() => setShowSuccessMessage(false)}
             />
           )}
