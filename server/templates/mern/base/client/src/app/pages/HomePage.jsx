@@ -22,11 +22,11 @@ export default function HomePage() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 {isAuthenticated ? (
-                  <Link className="btn-primary" to="/dashboard">Go to dashboard</Link>
+                  <Link className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-500/90" to="/dashboard">Go to dashboard</Link>
                 ) : (
                   <>
-                    <Link className="btn bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-500/90" to="/register">Get started</Link>
-                    <Link className="btn border border-slate-700 bg-transparent text-slate-100 hover:bg-slate-800" to="/login">Sign in</Link>
+                    <Link className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-500/90" to="/register">Get started</Link>
+                    <Link className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition border border-slate-700 bg-transparent text-slate-100 hover:bg-slate-800" to="/login">Sign in</Link>
                   </>
                 )}
               </div>
