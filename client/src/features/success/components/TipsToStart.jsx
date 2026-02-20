@@ -21,10 +21,10 @@ export default function TipsToStart() {
 
     return (
         <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-6 shadow-xl">
-            <div className="flex items-center space-x-3 mb-6">
-                <div className="flex items-center space-x-2">
+            <div className="flex items-center mb-6">
+                <div className="flex items-center gap-2 min-w-0">
                     <img src={listSvg} alt="Steps" className="w-9 h-9 object-contain" />
-                    <h3 className="text-xl font-bold text-white">Next Steps for {stackTitle}</h3>
+                    <h3 className="text-xl font-bold text-white break-words">Next Steps for {stackTitle}</h3>
                 </div>
             </div>
 
@@ -32,7 +32,7 @@ export default function TipsToStart() {
                 {currentTips.map((tip, index) => (
                     <div
                         key={index}
-                        className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300"
+                        className="flex flex-col sm:flex-row sm:items-start gap-4 p-4 bg-white/5 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 overflow-hidden"
                     >
                         {/* Step Number & Icon */}
                         <div className="flex-shrink-0">
@@ -50,22 +50,22 @@ export default function TipsToStart() {
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-2">
+                        <div className="flex-1 min-w-0 w-full">
+                            <div className="flex flex-wrap items-center gap-2 mb-2 min-w-0">
                                 <div className="text-blue-400">
                                     {tip.icon}
                                 </div>
-                                <h4 className="font-semibold text-white">{tip.title}</h4>
+                                <h4 className="font-semibold text-white break-words min-w-0">{tip.title}</h4>
                             </div>
 
-                            <p className="text-gray-400 text-sm mb-3 leading-relaxed">
+                            <p className="text-gray-400 text-sm mb-3 leading-relaxed break-words">
                                 {tip.description}
                             </p>
 
                             {/* Command */}
                             {tip.command && (
-                                <div className="bg-black/50 rounded-lg p-3 border border-gray-600">
-                                    <code className="text-green-400 text-sm font-mono">
+                                <div className="bg-black/50 rounded-lg p-3 border border-gray-600 max-w-full overflow-x-auto">
+                                    <code className="text-green-400 text-xs sm:text-sm font-mono whitespace-nowrap">
                                         $ {tip.command}
                                     </code>
                                 </div>
