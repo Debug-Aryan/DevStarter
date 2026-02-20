@@ -16,7 +16,7 @@ export default function SuccessMessage({
     }, [duration, onClose]);
 
     return (
-        <div className="fixed top-4 inset-x-0 z-50 flex justify-center px-4">
+        <div className="w-full flex justify-center mb-6 animate-slide-down">
             <div
                 className="
                     w-full max-w-xl
@@ -26,7 +26,6 @@ export default function SuccessMessage({
                     bg-emerald-500/10 backdrop-blur-md
                     px-5 py-4
                     shadow-xl
-                    animate-slide-down
                 "
                 role="alert"
             >
