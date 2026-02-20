@@ -42,7 +42,7 @@ export const tipsByStack = {
             command: 'npm run dev'
         },
         {
-            icon: <Globe className="w-5 h-5" />,
+            icon: commonIcons.browser,
             title: 'Setup Client',
             description: 'Open a new terminal, go to client folder and install dependencies',
             command: 'cd client && npm install'
@@ -54,6 +54,7 @@ export const tipsByStack = {
             command: 'npm run dev'
         }
     ],
+
     nextjs: [
         {
             icon: commonIcons.unzip,
@@ -76,10 +77,11 @@ export const tipsByStack = {
         {
             icon: commonIcons.browser,
             title: 'Open in Browser',
-            description: 'Navigate to localhost:3000 to see your app',
+            description: 'Navigate to http://localhost:3000',
             command: null
         }
     ],
+
     "node-express": [
         {
             icon: commonIcons.unzip,
@@ -102,10 +104,11 @@ export const tipsByStack = {
         {
             icon: <Server className="w-5 h-5" />,
             title: 'Test API',
-            description: 'Test your endpoints using Postman or curl',
+            description: 'Verify API health endpoint',
             command: 'curl http://localhost:5000/api/health'
         }
     ],
+
     django: [
         {
             icon: commonIcons.unzip,
@@ -116,13 +119,13 @@ export const tipsByStack = {
         {
             icon: <Terminal className="w-5 h-5" />,
             title: 'Create Virtual Env',
-            description: 'Create a python virtual environment',
+            description: 'Create a Python virtual environment',
             command: 'python -m venv venv'
         },
         {
             icon: <Code className="w-5 h-5" />,
             title: 'Install dependencies',
-            description: 'Activate venv (source venv/bin/activate) and install requirements',
+            description: 'Activate venv (source venv/bin/activate or venv\\Scripts\\activate) and install requirements',
             command: 'pip install -r requirements.txt'
         },
         {
@@ -138,6 +141,7 @@ export const tipsByStack = {
             command: 'python manage.py runserver'
         }
     ],
+
     "spring-boot": [
         {
             icon: commonIcons.unzip,
@@ -149,21 +153,22 @@ export const tipsByStack = {
             icon: <Coffee className="w-5 h-5" />,
             title: 'Build Project',
             description: 'Build the application using Maven',
-            command: './mvnw clean install'
+            command: './mvnw clean install (or mvnw.cmd clean install on Windows)'
         },
         {
             icon: commonIcons.run,
             title: 'Run Application',
             description: 'Start the Spring Boot application',
-            command: './mvnw spring-boot:run'
+            command: './mvnw spring-boot:run (or mvnw.cmd spring-boot:run)'
         },
         {
             icon: commonIcons.browser,
             title: 'Access App',
-            description: 'Open your browser at localhost:8080',
+            description: 'Open your browser at http://localhost:8080',
             command: null
         }
     ],
+
     flask: [
         {
             icon: commonIcons.unzip,
@@ -174,13 +179,13 @@ export const tipsByStack = {
         {
             icon: <Terminal className="w-5 h-5" />,
             title: 'Create Virtual Env',
-            description: 'Create a python virtual environment',
+            description: 'Create a Python virtual environment',
             command: 'python -m venv venv'
         },
         {
             icon: <Zap className="w-5 h-5" />,
             title: 'Install requirements',
-            description: 'Install Flask and other dependencies',
+            description: 'Activate venv and install dependencies',
             command: 'pip install -r requirements.txt'
         },
         {
@@ -190,6 +195,7 @@ export const tipsByStack = {
             command: 'python run.py'
         }
     ],
+
     "full-stack-ts": [
         {
             icon: commonIcons.unzip,
@@ -200,13 +206,13 @@ export const tipsByStack = {
         {
             icon: commonIcons.install,
             title: 'Setup Server',
-            description: 'Navigate to server, install dependencies',
+            description: 'Navigate to server and install dependencies',
             command: 'cd server && npm install'
         },
         {
             icon: <Database className="w-5 h-5" />,
             title: 'Setup Database',
-            description: 'Configure .env with your PostgreSQL credentials',
+            description: 'Configure .env with your MongoDB connection string',
             command: null
         },
         {
@@ -218,7 +224,7 @@ export const tipsByStack = {
         {
             icon: commonIcons.install,
             title: 'Setup Client',
-            description: 'In new terminal: Navigate to client, install dependencies',
+            description: 'In a new terminal, install client dependencies',
             command: 'cd client && npm install'
         },
         {
@@ -228,6 +234,7 @@ export const tipsByStack = {
             command: 'npm run dev'
         }
     ],
+
     "react-native": [
         {
             icon: commonIcons.unzip,
@@ -250,8 +257,8 @@ export const tipsByStack = {
         {
             icon: <Code className="w-5 h-5" />,
             title: 'Run on Device',
-            description: 'Scan the QR code with Expo Go or run on emulator',
-            command: 'a (Android) or i (iOS)'
+            description: 'Scan QR code with Expo Go or run on emulator',
+            command: 'Press a (Android) or i (iOS)'
         }
     ]
 };
