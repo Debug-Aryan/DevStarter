@@ -3,51 +3,51 @@ import { Code, Database, Shield, Settings, FileText, Rocket } from 'lucide-react
 export const features = [
     {
         icon: <Code className="w-8 h-8" />,
-        title: "Stack Selection",
-        description: "Choose from MERN, Next.js, Node/Express, and more popular stacks"
+        title: "Multiple Tech Stacks",
+        description: "Choose from MERN, Next.js, Node.js, Django, Spring Boot, Flask, and more."
     },
     {
         icon: <Shield className="w-8 h-8" />,
-        title: "Auth Ready",
-        description: "JWT, OAuth, and authentication flows pre-configured"
+        title: "Authentication Ready",
+        description: "Pre-configured authentication flows including JWT and secure middleware."
     },
     {
         icon: <Settings className="w-8 h-8" />,
-        title: "Docker + CI",
-        description: "Containerized setup with GitHub Actions workflows"
+        title: "Production Tooling",
+        description: "Docker support, environment configs, and clean setup for real-world projects."
     },
     {
         icon: <FileText className="w-8 h-8" />,
-        title: "Auto README",
-        description: "Generated documentation with setup instructions"
+        title: "Clear Documentation",
+        description: "Auto-generated README files with setup, structure, and usage instructions."
     },
     {
         icon: <Database className="w-8 h-8" />,
-        title: "Clean Structure",
-        description: "Organized folder structure following best practices"
+        title: "Clean Architecture",
+        description: "Well-organized folder structures following industry best practices."
     },
     {
         icon: <Rocket className="w-8 h-8" />,
-        title: "Deploy-Ready",
-        description: "One-click deployment configs for Vercel, Heroku, AWS"
+        title: "Deploy Ready",
+        description: "Deployment configurations included for platforms like Vercel and Render."
     }
 ];
 
 export const steps = [
     {
-        number: "01",
-        title: "Choose your stack",
-        description: "Select from popular tech stacks like MERN, Next.js, or create your custom combo"
+        number: "1",
+        title: "Select a Tech Stack",
+        description: "Choose a backend, frontend, or full-stack setup that fits your project needs."
     },
     {
-        number: "02",
-        title: "Toggle your features",
-        description: "Add authentication, Docker, database integration, and other essential features"
+        number: "2",
+        title: "Configure Features",
+        description: "Enable authentication, Docker support, environment setup, and more."
     },
     {
-        number: "03",
-        title: "Download & Start Coding",
-        description: "Get your complete boilerplate and start building your app immediately"
+        number: "3",
+        title: "Generate & Build",
+        description: "Download your project boilerplate and start building immediately."
     }
 ];
 

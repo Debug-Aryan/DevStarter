@@ -63,7 +63,7 @@ export default function StackSelector({ onNext }) {
         {
             id: 'nextjs',
             title: 'Next.js',
-            description: 'React framework with SSR, SSG, API routes, and great DX',
+            description: 'React framework with server-side rendering, static generation, and API routes',
             icon: iconNode(nextJsIcon, 'Next.js', { bgColor: '#ffffff' }),
             color: 'from-black-200 to-gray-600',
             tags: ['React', 'SSR', 'SSG', 'API Routes'],
@@ -99,19 +99,19 @@ export default function StackSelector({ onNext }) {
         {
             id: 'flask',
             title: 'Flask',
-            description: 'Lightweight Python microframework for building APIs quickly',
+            description: 'Lightweight Python framework for building APIs and backend services',
             icon: iconNode(flaskIcon, 'Flask', { bgColor: '#ffffff' }),
             color: 'from-yellow-400 to-red-500',
-            tags: ['Python', 'Flask', 'Microframework', 'API'],
+            tags: ['Python', 'Flask', 'Microframework', 'Backend'],
             popular: false
         },
         {
             id: 'full-stack-ts',
             title: 'Full-Stack TypeScript',
-            description: 'End-to-end TypeScript with React, Node.js, and PostgreSQL',
+            description: 'End-to-end TypeScript with React, Node.js, and MongoDB',
             icon: iconNode(fullStackTsIcon, 'Full-Stack TypeScript'),
             color: 'from-blue-600 to-purple-700',
-            tags: ['TypeScript', 'React', 'Node.js', 'PostgreSQL'],
+            tags: ['TypeScript', 'React', 'Node.js', 'MongoDB'],
             popular: true
         },
         {
@@ -141,131 +141,131 @@ export default function StackSelector({ onNext }) {
             <div className="min-h-screen flex flex-col bg-gradient-to-b from-black to-gray-900 text-white">
                 <div className="flex-1 p-8">
                     <div className="max-w-7xl mx-auto">
-                    {/* Header */}
-                    <div className="text-center mb-12">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
-                            Choose Your Stack
-                        </h1>
-                        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                            Choose a tech stack — preconfigured and ready to build.
-                        </p>
-                    </div>
+                        {/* Header */}
+                        <div className="text-center mb-12">
+                            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
+                                Choose Your Stack
+                            </h1>
+                            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                                Choose a tech stack — preconfigured and ready to build.
+                            </p>
+                        </div>
 
-                    {/* Stack Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
-                        {stacks.map((stack) => {
-                            const isSelected = selectedStack === stack.id;
+                        {/* Stack Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
+                            {stacks.map((stack) => {
+                                const isSelected = selectedStack === stack.id;
 
-                            return (
-                                <div
-                                    key={stack.id}
-                                    onClick={() => handleStackSelect(stack.id)}
-                                    className={`
+                                return (
+                                    <div
+                                        key={stack.id}
+                                        onClick={() => handleStackSelect(stack.id)}
+                                        className={`
                                     relative group transition-all duration-300 transform hover:scale-105
                   ${isSelected ? 'scale-105' : ''}
                 `}
-                                >
-                                    {/* Popular Badge */}
-                                    {stack.popular && (
-                                        <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full">
-                                            Popular
-                                        </div>
-                                    )}
-
-                                    {/* Selection Indicator */}
-                                    <div className="absolute top-4 right-4 z-10">
-                                        {isSelected ? (
-                                            <CheckCircle2 className="w-6 h-6 text-green-400" />
-                                        ) : (
-                                            <Circle className="w-6 h-6 text-gray-500 group-hover:text-gray-300 transition-colors" />
+                                    >
+                                        {/* Popular Badge */}
+                                        {stack.popular && (
+                                            <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full">
+                                                Popular
+                                            </div>
                                         )}
-                                    </div>
 
-                                    {/* Card */}
-                                    <div className={`
+                                        {/* Selection Indicator */}
+                                        <div className="absolute top-4 right-4 z-10">
+                                            {isSelected ? (
+                                                <CheckCircle2 className="w-6 h-6 text-green-400" />
+                                            ) : (
+                                                <Circle className="w-6 h-6 text-gray-500 group-hover:text-gray-300 transition-colors" />
+                                            )}
+                                        </div>
+
+                                        {/* Card */}
+                                        <div className={`
                   relative h-full bg-white/5 backdrop-blur-lg rounded-2xl border transition-all duration-300
                   ${isSelected
-                                            ? 'border-blue-400 bg-white/10 shadow-lg shadow-blue-500/20'
-                                            : 'border-gray-700 hover:border-gray-600 hover:bg-white/8'
-                                        }
+                                                ? 'border-blue-400 bg-white/10 shadow-lg shadow-blue-500/20'
+                                                : 'border-gray-700 hover:border-gray-600 hover:bg-white/8'
+                                            }
                 `}>
-                                        {/* Gradient Accent Bar */}
-                                        <div className={`
+                                            {/* Gradient Accent Bar */}
+                                            <div className={`
                     h-2 rounded-t-full bg-gradient-to-r ${stack.color}
                     ${isSelected ? 'opacity-100' : 'opacity-60 group-hover:opacity-80'}
                     transition-opacity duration-300
                   `} />
 
-                                        <div className="p-6">
-                                            {/* Icon */}
-                                            <div className="mb-4">
-                                                {stack.icon}
-                                            </div>
+                                            <div className="p-6">
+                                                {/* Icon */}
+                                                <div className="mb-4">
+                                                    {stack.icon}
+                                                </div>
 
-                                            {/* Title */}
-                                            <h3 className="text-xl font-bold mb-2 group-hover:text-blue-300 transition-colors">
-                                                {stack.title}
-                                            </h3>
+                                                {/* Title */}
+                                                <h3 className="text-xl font-bold mb-2 group-hover:text-blue-300 transition-colors">
+                                                    {stack.title}
+                                                </h3>
 
-                                            {/* Description */}
-                                            <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                                                {stack.description}
-                                            </p>
+                                                {/* Description */}
+                                                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                                                    {stack.description}
+                                                </p>
 
-                                            {/* Tags */}
-                                            <div className="flex flex-wrap gap-2">
-                                                {stack.tags.map((tag, index) => (
-                                                    <span
-                                                        key={index}
-                                                        className={`
+                                                {/* Tags */}
+                                                <div className="flex flex-wrap gap-2">
+                                                    {stack.tags.map((tag, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className={`
                             px-2 py-1 text-xs rounded-full transition-all duration-300
                             ${isSelected
-                                                                ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                                                                : 'bg-gray-700/50 text-gray-300 group-hover:bg-gray-600/50'
-                                                            }
+                                                                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                                                                    : 'bg-gray-700/50 text-gray-300 group-hover:bg-gray-600/50'
+                                                                }
                           `}
-                                                    >
-                                                        {tag}
-                                                    </span>
-                                                ))}
+                                                        >
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        {/* Selection Overlay */}
-                                        {isSelected && (
-                                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl pointer-events-none" />
-                                        )}
+                                            {/* Selection Overlay */}
+                                            {isSelected && (
+                                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl pointer-events-none" />
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Selected Stack Info */}
+                        {selectedStack && (
+                            <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-8 max-w-2xl mx-auto mt-12">
+                                <div className="text-center">
+                                    <h3 className="text-2xl font-bold mb-4 text-blue-300">
+                                        {stacks.find(s => s.id === selectedStack)?.title} Selected
+                                    </h3>
+                                    <p className="text-gray-300 mb-6">
+                                        Great choice! This stack includes everything you need to get started quickly.
+                                    </p>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                        <GenerateButton label="Customize Features" onClick={onNext} />
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Selected Stack Info */}
-                    {selectedStack && (
-                        <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-gray-700 p-8 max-w-2xl mx-auto mt-12">
-                            <div className="text-center">
-                                <h3 className="text-2xl font-bold mb-4 text-blue-300">
-                                    {stacks.find(s => s.id === selectedStack)?.title} Selected
-                                </h3>
-                                <p className="text-gray-300 mb-6">
-                                    Great choice! This stack includes everything you need to get started quickly.
-                                </p>
-
-                                {/* Action Buttons */}
-                                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                    <GenerateButton label="Customize Features" onClick={onNext} />
-                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Help Text */}
-                    <div className="text-center mt-12">
-                        <p className="text-gray-400 text-sm">
-                            Not sure which stack to choose? All stacks come with authentication, Docker support, and deployment configs.
-                        </p>
-                    </div>
+                        {/* Help Text */}
+                        <div className="text-center mt-12">
+                            <p className="text-gray-400 text-sm">
+                                Not sure which stack to choose? All stacks come with authentication, Docker support, and deployment configs.
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <Footer />
