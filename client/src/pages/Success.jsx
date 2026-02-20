@@ -39,10 +39,13 @@ export default function Success() {
         <div className="flex-1 p-8">
           <div className="max-w-3xl mx-auto">
 
-          <SuccessMessage
-            isVisible={showSuccessMessage}
-            onComplete={() => setShowSuccessMessage(false)}
-          />
+          {showSuccessMessage && (
+            <SuccessMessage
+              title="Download Complete"
+              message="Your DevStarter project is ready. Happy coding 🚀"
+              onClose={() => setShowSuccessMessage(false)}
+            />
+          )}
 
 
           {/* Main Content */}
