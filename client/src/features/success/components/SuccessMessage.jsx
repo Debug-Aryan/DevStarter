@@ -3,7 +3,7 @@ import { CheckCircle, X } from "lucide-react";
 
 export default function SuccessMessage({
     title = "Success",
-    message = "Your project has been downloaded successfully.",
+    message = "Your project has been downloaded successfully. Happy Coding!🚀",
     duration = 4000,
     onClose
 }) {
