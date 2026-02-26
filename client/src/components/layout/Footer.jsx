@@ -31,7 +31,7 @@ export default function Footer() {
                             <p className="hidden md:block text-m text-gray-500">
                                 Empowering developers worldwide with modern tools •
                                 © {new Date().getFullYear()} DevStarter •
-                                Built by <span className="font-semibold text-gray-300 hover:text-white transition-colors">Aryan Prajapati</span>
+                                Built by ❤️ <span className="font-semibold text-gray-300 hover:text-white transition-colors">Aryan Prajapati</span>
                             </p>
 
                             <p className="block md:hidden text-m text-gray-500">
