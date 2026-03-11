@@ -1,6 +1,6 @@
 export default function CodePreviewSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-black via-gray-950 to-gray-900 px-6 py-24">
+    <section id="structure" className="relative overflow-hidden bg-gradient-to-b from-black via-gray-950 to-gray-900 px-6 py-24">
       
       {/* glow background */}
       <div className="absolute inset-0 flex justify-center">

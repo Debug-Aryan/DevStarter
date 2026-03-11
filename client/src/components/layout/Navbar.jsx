@@ -13,13 +13,12 @@ export default function Navbar() {
   const navLinks = [
     { id: 'features', label: 'Features', href: '/#features' },
     { id: 'how-it-works', label: 'How It Works', href: '/#how-it-works' },
-    { id: 'reviews', label: 'Reviews', href: '/#testimonials' }
+    { id: 'structure', label: 'Structure', href: '/#structure' }
   ];
 
   const handleLinkClick = (linkId) => {
     setActiveLink(linkId);
-    setIsMenuAnimating(true);
-    setIsMenuOpen(false);
+    if (isMenuOpen) closeMenu();
   };
 
   const closeMenu = () => {
