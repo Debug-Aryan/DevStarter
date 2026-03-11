@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { motion, useSpring } from "framer-motion"
 
 const isTouchOrCoarsePointerDevice = () => {
@@ -78,14 +78,21 @@ function SmoothCursorDesktop({
     restDelta: 0.001,
   },
 }) {
-  const [, setIsMoving] = useState(false)
+  // NOTE: Some ESLint configs don't count `<motion.div>` as a usage of `motion`.
+  // Referencing it in JS keeps lint happy and is equivalent at runtime.
+  const MotionDiv = motion.div
 
+  const targetPos = useRef({ x: 0, y: 0 })
   const lastMousePos = useRef({ x: 0, y: 0 })
   const velocity = useRef({ x: 0, y: 0 })
-  const lastUpdateTime = useRef(Date.now())
+  const lastUpdateTime = useRef(0)
+  const hasInitRef = useRef(false)
   const previousAngle = useRef(0)
   const accumulatedRotation = useRef(0)
+  const rafIdRef = useRef(null)
+  const idleTimerRef = useRef(null)
 
+  // Use transform-based motion values for better perf than left/top.
   const cursorX = useSpring(0, springConfig)
   const cursorY = useSpring(0, springConfig)
 
@@ -102,31 +109,33 @@ function SmoothCursorDesktop({
   })
 
   useEffect(() => {
-    const updateVelocity = (currentPos) => {
-      const currentTime = Date.now()
+    const now = performance.now()
+    lastUpdateTime.current = now
+
+    const updateFromTarget = () => {
+      rafIdRef.current = null
+
+      const currentTime = performance.now()
       const deltaTime = currentTime - lastUpdateTime.current
 
-      if (deltaTime > 0) {
-        velocity.current = {
-          x: (currentPos.x - lastMousePos.current.x) / deltaTime,
-          y: (currentPos.y - lastMousePos.current.y) / deltaTime,
-        }
+      // Clamp huge gaps (tab switch / idle) to avoid sudden rotation jumps.
+      const dt = Math.min(Math.max(deltaTime, 1), 50)
+
+      const currentPos = { x: targetPos.current.x, y: targetPos.current.y }
+      velocity.current = {
+        x: (currentPos.x - lastMousePos.current.x) / dt,
+        y: (currentPos.y - lastMousePos.current.y) / dt,
       }
 
       lastUpdateTime.current = currentTime
       lastMousePos.current = currentPos
-    }
 
-    const smoothMouseMove = (e) => {
-      const currentPos = { x: e.clientX, y: e.clientY }
-      updateVelocity(currentPos)
-
-      const speed = Math.sqrt(velocity.current.x ** 2 + velocity.current.y ** 2)
+      const speed = Math.hypot(velocity.current.x, velocity.current.y)
 
       cursorX.set(currentPos.x)
       cursorY.set(currentPos.y)
 
-      if (speed > 0.1) {
+      if (speed > 0.08) {
         const currentAngle =
           Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
           90
@@ -140,49 +149,52 @@ function SmoothCursorDesktop({
         previousAngle.current = currentAngle
 
         scale.set(0.95)
-        setIsMoving(true)
-
-        const timeout = setTimeout(() => {
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
+        idleTimerRef.current = setTimeout(() => {
           scale.set(1)
-          setIsMoving(false)
+          idleTimerRef.current = null
         }, 150)
-
-        return () => clearTimeout(timeout)
       }
     }
 
-    let rafId = null
+    const onPointerMove = (e) => {
+      targetPos.current = { x: e.clientX, y: e.clientY }
 
-    const throttledMouseMove = (e) => {
-      if (rafId) return
+      // Initialize on first move to avoid a big first-frame velocity/jump.
+      if (!hasInitRef.current) {
+        hasInitRef.current = true
+        lastMousePos.current = targetPos.current
+        lastUpdateTime.current = performance.now()
+        cursorX.set(targetPos.current.x)
+        cursorY.set(targetPos.current.y)
+      }
 
-      rafId = requestAnimationFrame(() => {
-        smoothMouseMove(e)
-        rafId = null
-      })
+      if (rafIdRef.current != null) return
+      rafIdRef.current = requestAnimationFrame(updateFromTarget)
     }
 
-    document.body.style.cursor = "none"
+    document.documentElement.style.cursor = "none"
 
-    window.addEventListener("mousemove", throttledMouseMove)
+    window.addEventListener("pointermove", onPointerMove, { passive: true })
 
     return () => {
-      window.removeEventListener("mousemove", throttledMouseMove)
-      document.body.style.cursor = "auto"
-      if (rafId) cancelAnimationFrame(rafId)
+      window.removeEventListener("pointermove", onPointerMove)
+      document.documentElement.style.cursor = ""
+      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current)
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
     }
   }, [cursorX, cursorY, rotation, scale])
 
   return (
-    <motion.div
+    <MotionDiv
       style={{
-        left: cursorX,
-        top: cursorY,
+        x: cursorX,
+        y: cursorY,
       }}
-      className="fixed left-0 top-0 z-[100] pointer-events-none -translate-x-1/2 -translate-y-1/2"
+      className="fixed left-0 top-0 z-[100] pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform"
       aria-hidden="true"
     >
-      <motion.div
+      <MotionDiv
         style={{
           rotate: rotation,
           scale,
@@ -197,8 +209,8 @@ function SmoothCursorDesktop({
         }}
       >
         {cursor}
-      </motion.div>
-    </motion.div>
+      </MotionDiv>
+    </MotionDiv>
   )
 }
 
