@@ -191,7 +191,7 @@ function SmoothCursorDesktop({
         x: cursorX,
         y: cursorY,
       }}
-      className="fixed left-0 top-0 z-[100] pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform"
+      className="smooth-cursor fixed left-0 top-0 z-[100000] pointer-events-none -translate-x-1/2 -translate-y-1/2 will-change-transform"
       aria-hidden="true"
     >
       <MotionDiv

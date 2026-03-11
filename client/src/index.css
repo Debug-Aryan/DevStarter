@@ -13,6 +13,29 @@ html {
 * {
   cursor: none !important;
 }
+
+/*
+  When a full-screen overlay (like DemoVideoModal) wants to use the OS cursor,
+  it toggles `native-cursor-mode` on <body>. This restores native cursor
+  behavior and hides the SmoothCursor overlay just for that state.
+*/
+body.native-cursor-mode,
+body.native-cursor-mode * {
+  cursor: auto !important;
+}
+
+body.native-cursor-mode button,
+body.native-cursor-mode a,
+body.native-cursor-mode [role="button"],
+body.native-cursor-mode [type="button"],
+body.native-cursor-mode [type="submit"],
+body.native-cursor-mode [type="reset"] {
+  cursor: pointer !important;
+}
+
+body.native-cursor-mode .smooth-cursor {
+  display: none !important;
+}
 html,
 body {
   font-family: var(--font-sans);

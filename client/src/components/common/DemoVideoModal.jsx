@@ -4,15 +4,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }) {
+  // NOTE: Some ESLint configs don't count `<motion.div>` as a usage of `motion`.
+  // Referencing it in JS keeps lint happy and is equivalent at runtime.
+  const MotionDiv = motion.div;
+
   // Prevent background scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('native-cursor-mode');
     } else {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('native-cursor-mode');
     }
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('native-cursor-mode');
     };
   }, [isOpen]);
 
@@ -90,7 +97,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
       {isOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
           {/* Backdrop */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -102,7 +109,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
 
           {/* Moving blurred background accents */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <motion.div
+            <MotionDiv
               className="absolute left-1/2 top-1/3 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl"
               initial={{ y: -10, opacity: 0.6 }}
               animate={{ y: [ -10, 20, -10 ], opacity: [ 0.55, 0.75, 0.55 ] }}
@@ -111,7 +118,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
           </div>
 
           {/* Modal Container */}
-          <motion.div
+          <MotionDiv
             style={{ transformOrigin: '50% 100%' }}
             custom={fromTriggerOffset}
             variants={modalVariants}
@@ -143,7 +150,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
                 allowFullScreen
               />
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       )}
     </AnimatePresence>,
