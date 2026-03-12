@@ -32,7 +32,7 @@ export default function Footer() {
                             </p>
 
                             <p className="block md:hidden text-m text-gray-500">
-                                © {new Date().getFullYear()} DevStarter • <span className="font-semibold text-gray-300 hover:text-white transition-colors">Aryan Prajapati</span>
+                                © {new Date().getFullYear()} DevStarter • <span className="font-semibold text-white transition-colors">Aryan Prajapati</span>
                             </p>
                         </div>
 
