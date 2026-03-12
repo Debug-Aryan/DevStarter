@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { memo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { fileTree } from "../data/codePreviewFileTree";
 
 const defaultOpenPaths = new Set([
@@ -9,20 +10,23 @@ const defaultOpenPaths = new Set([
   "my-awesome-app/server/src/",
 ]);
 
-function TreeNode({ node, depth = 0, index = 0, parentPath = "" }) {
+const TreeNode = memo(function TreeNode({
+  node,
+  depth = 0,
+  index = 0,
+  parentPath = "",
+  reduceMotion = false,
+}) {
   const fullPath = `${parentPath}${node.name}`;
   const [open, setOpen] = useState(() => defaultOpenPaths.has(fullPath));
   const isFolder = node.type === "folder" || node.type === "root";
   const hasChildren = node.children?.length > 0;
 
   const indent = depth * 16;
-  const animDelay = `${index * 30}ms`;
+  const animDelay = reduceMotion ? "0ms" : `${index * 30}ms`;
 
   return (
-    <div
-      style={{ animationDelay: animDelay }}
-      className="animate-fadeIn"
-    >
+    <div style={{ animationDelay: animDelay }} className={reduceMotion ? "" : "animate-fadeIn"}>
       <div
         className={`flex items-center gap-1.5 py-[2px] px-2 rounded-md transition-all duration-150 cursor-pointer group
           ${isFolder ? "hover:bg-white/5" : "hover:bg-white/[0.03]"}`}
@@ -64,16 +68,29 @@ function TreeNode({ node, depth = 0, index = 0, parentPath = "" }) {
               depth={depth + 1}
               index={i}
               parentPath={fullPath}
+              reduceMotion={reduceMotion}
             />
           ))}
         </div>
       )}
     </div>
   );
-}
+},
+(prev, next) =>
+  prev.node === next.node &&
+  prev.depth === next.depth &&
+  prev.index === next.index &&
+  prev.parentPath === next.parentPath &&
+  prev.reduceMotion === next.reduceMotion);
 
 export default function CodePreviewSection() {
   const [expanded, setExpanded] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  const treeHeight = expanded ? 640 : 340;
+  const treeTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.45, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <section
@@ -132,6 +149,14 @@ export default function CodePreviewSection() {
             rgba(59, 130, 246, 0.6)
           );
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fadeIn {
+            animation: none !important;
+            opacity: 1 !important;
+            will-change: auto !important;
+          }
+        }
       `}</style>
 
       {/* glow backgrounds */}
@@ -162,14 +187,18 @@ export default function CodePreviewSection() {
 
           <div className="relative bg-gray-950/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
             {/* terminal header bar */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06] bg-black/30">
+            <div className="relative flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06] bg-black/30">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 bg-red-500 rounded-full hover:brightness-125 cursor-pointer transition" />
                 <span className="w-3 h-3 bg-yellow-400 rounded-full hover:brightness-125 cursor-pointer transition" />
                 <span className="w-3 h-3 bg-green-500 rounded-full hover:brightness-125 cursor-pointer transition" />
               </div>
-              <span className="text-gray-500 text-xs font-mono tracking-wider">project-structure</span>
-              <div className="flex items-center gap-3">
+
+              <span className="absolute left-1/2 -translate-x-1/2 text-gray-500 text-xs font-mono tracking-wider whitespace-nowrap">
+                project-structure
+              </span>
+
+              <div className="hidden md:flex items-center gap-3">
                 <span className="text-[11px] font-mono text-emerald-400/70 bg-emerald-400/10 px-2 py-0.5 rounded">
                   fullstack
                 </span>
@@ -193,20 +222,36 @@ export default function CodePreviewSection() {
             </div>
 
             {/* file tree */}
-            <div
-              className="ds-scrollbar py-4 px-2 overflow-y-auto overscroll-contain transition-[max-height] duration-500 ease-in-out"
-              style={{ maxHeight: expanded ? "640px" : "340px" }}
+            <motion.div
+              initial={false}
+              animate={{ height: treeHeight }}
+              transition={treeTransition}
+              style={{ willChange: reduceMotion ? "auto" : "height" }}
+              className="overflow-hidden"
             >
-              {fileTree.map((node, i) => (
-                <TreeNode key={node.name} node={node} depth={0} index={i} parentPath="" />
-              ))}
-            </div>
+              <div className="ds-scrollbar h-full py-4 px-2 overflow-y-auto overscroll-contain">
+                {fileTree.map((node, i) => (
+                  <TreeNode
+                    key={node.name}
+                    node={node}
+                    depth={0}
+                    index={i}
+                    parentPath=""
+                    reduceMotion={reduceMotion}
+                  />
+                ))}
+              </div>
+            </motion.div>
 
             {/* expand / collapse footer */}
             <div className="relative">
-              {!expanded && (
-                <div className="absolute -top-16 left-0 right-0 h-16 bg-gradient-to-t from-gray-950 to-transparent pointer-events-none" />
-              )}
+              <motion.div
+                aria-hidden="true"
+                className="absolute -top-16 left-0 right-0 h-16 bg-gradient-to-t from-gray-950 to-transparent pointer-events-none"
+                initial={false}
+                animate={{ opacity: expanded ? 0 : 1 }}
+                transition={reduceMotion ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }}
+              />
               <div className="border-t border-white/[0.06] bg-black/30 px-5 py-3 flex items-center justify-between">
                 <span className="text-[11px] text-gray-600 font-mono">
                   {expanded ? "showing full tree" : "tree truncated"}
@@ -228,11 +273,11 @@ export default function CodePreviewSection() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
 
         {/* bottom feature pills */}
         <div className="flex flex-wrap justify-center gap-3 mt-10">
-          {["Monorepo ready", "Docker included", "CI/CD workflows", "TypeScript first", "Auto .env setup"].map((label) => (
+          {["Monorepo ready", "Docker included", "TypeScript first", "Auto .env setup"].map((label) => (
             <span
               key={label}
               className="text-xs font-mono text-gray-400 border border-white/10 bg-white/[0.03] px-3 py-1.5 rounded-full hover:border-purple-500/30 hover:text-gray-300 transition-all cursor-default"
