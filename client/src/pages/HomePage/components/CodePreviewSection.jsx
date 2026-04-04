@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { fileTree } from "../data/codePreviewFileTree";
 
 const defaultOpenPaths = new Set([
@@ -84,13 +84,7 @@ const TreeNode = memo(function TreeNode({
   prev.reduceMotion === next.reduceMotion);
 
 export default function CodePreviewSection() {
-  const [expanded, setExpanded] = useState(false);
   const reduceMotion = useReducedMotion();
-
-  const treeHeight = expanded ? 640 : 340;
-  const treeTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.45, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <section
@@ -222,14 +216,8 @@ export default function CodePreviewSection() {
             </div>
 
             {/* file tree */}
-            <motion.div
-              initial={false}
-              animate={{ height: treeHeight }}
-              transition={treeTransition}
-              style={{ willChange: reduceMotion ? "auto" : "height" }}
-              className="overflow-hidden"
-            >
-              <div className="ds-scrollbar h-full py-4 px-2 overflow-y-auto overscroll-contain">
+            <div className="h-[350px] overflow-hidden">
+              <div className="ds-scrollbar h-full pt-4 pb-10 px-2 overflow-y-auto overscroll-contain">
                 {fileTree.map((node, i) => (
                   <TreeNode
                     key={node.name}
@@ -240,36 +228,6 @@ export default function CodePreviewSection() {
                     reduceMotion={reduceMotion}
                   />
                 ))}
-              </div>
-            </motion.div>
-
-            {/* expand / collapse footer */}
-            <div className="relative">
-              <motion.div
-                aria-hidden="true"
-                className="absolute -top-16 left-0 right-0 h-16 bg-gradient-to-t from-gray-950 to-transparent pointer-events-none"
-                initial={false}
-                animate={{ opacity: expanded ? 0 : 1 }}
-                transition={reduceMotion ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }}
-              />
-              <div className="border-t border-white/[0.06] bg-black/30 px-5 py-3 flex items-center justify-between">
-                <span className="text-[11px] text-gray-600 font-mono">
-                  {expanded ? "showing full tree" : "tree truncated"}
-                </span>
-                <button
-                  type="button"
-                  data-no-loader="true"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setExpanded((e) => !e);
-                  }}
-                  className="flex items-center gap-1.5 text-xs font-mono text-purple-400 hover:text-purple-300 transition-colors group/btn"
-                >
-                  <span>{expanded ? "Collapse tree ↑" : "Expand full tree ↓"}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 group-hover/btn:border-purple-500/40 transition">
-                    {expanded ? "−" : "+"}
-                  </span>
-                </button>
               </div>
             </div>
           </div>
