@@ -1,21 +1,26 @@
 import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
 
-export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
+export default function FeatureCard({ feature, isEnabled, toggleFeature, supported = true }) {
     return (
-        <div
+        <button
+            type="button"
+            disabled={!supported}
+            onClick={() => supported && toggleFeature(feature.id)}
             className={`
-        relative group transition-all duration-300 transform hover:scale-105
+        relative group transition-all duration-300 transform w-full text-left
+        ${supported ? 'hover:scale-105' : ''}
         ${isEnabled ? 'scale-105' : ''}
+        ${!supported ? 'opacity-40 cursor-not-allowed' : ''}
       `}
-            onClick={() => toggleFeature(feature.id)}
         >
             {/* Feature Card */}
             <div className={`
         relative h-full bg-white/5 backdrop-blur-lg rounded-2xl border transition-all duration-300 p-6
         ${isEnabled
                     ? 'border-blue-400 bg-white/10 shadow-lg shadow-blue-500/20'
-                    : 'border-gray-700 hover:border-gray-600 hover:bg-white/8'
+                    : supported
+                        ? 'border-gray-700 hover:border-gray-600 hover:bg-white/8'
+                        : 'border-gray-700'
                 }
       `}>
 
@@ -59,9 +64,18 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
                 </h3>
 
                 {/* Feature Description */}
-                <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                    {feature.description}
-                </p>
+                <div className="mb-6">
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                        {feature.description}
+                    </p>
+
+                    {/* Unsupported Message */}
+                    {!supported && (
+                        <p className="text-xs text-gray-400 mt-2">
+                            Not available for this stack
+                        </p>
+                    )}
+                </div>
 
                 {/* Toggle Switch */}
                 <div className="flex items-center justify-between">
@@ -88,6 +102,6 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature }) {
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl pointer-events-none" />
                 )}
             </div>
-        </div>
+        </button>
     );
 }
