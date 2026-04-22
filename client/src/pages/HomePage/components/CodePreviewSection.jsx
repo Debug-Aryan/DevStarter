@@ -216,7 +216,11 @@ export default function CodePreviewSection() {
             </div>
 
             {/* file tree */}
-            <div className="h-[350px] overflow-hidden">
+            <div className="relative h-[350px] overflow-hidden">
+              {/* subtle inner shadows (top/bottom) to hint scroll */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-10 bg-gradient-to-b from-gray-950/90 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-gray-950/90 to-transparent" />
+
               <div className="ds-scrollbar h-full pt-4 pb-10 px-2 overflow-y-auto overscroll-contain">
                 {fileTree.map((node, i) => (
                   <TreeNode
