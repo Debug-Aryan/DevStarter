@@ -50,7 +50,7 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature, support
                         <img
                             src={feature.icon}
                             alt={feature.title}
-                            className="w-8 h-8 object-contain scale-110"
+                            className="block w-8 h-8 object-contain transform-gpu sm:scale-110"
                             draggable="false"
                         />
                     </div>

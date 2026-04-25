@@ -35,7 +35,7 @@ export default function FeatureSummary({ features, featureList, onNext, onBack, 
                                     <img
                                         src={feature.icon}
                                         alt={feature.title}
-                                        className="w-8 h-8 object-contain"
+                                        className="block w-8 h-8 object-contain transform-gpu"
                                         draggable="false"
                                     />
                                 </div>
