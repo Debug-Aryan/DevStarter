@@ -4,6 +4,7 @@ export default function FeatureCard({ feature, isEnabled, toggleFeature, support
     return (
         <button
             type="button"
+            data-no-loader="true"
             disabled={!supported}
             onClick={() => supported && toggleFeature(feature.id)}
             className={`
