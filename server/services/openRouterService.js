@@ -34,7 +34,7 @@ Django: Python virtual environment ('venv'), 'pip install -r requirements.txt', 
 Spring Boot: Use './mvnw' or 'mvnw.cmd', runs on port 8080.
 Flask: Python virtual environment, 'python run.py'.
 Full-Stack TypeScript: Client + server structure, uses MongoDB (NOT PostgreSQL).
-React Native: Expo usage, 'npx expo start'.
+React Native: Expo usage, 'npx expo start' .
 
 FEATURE-SPECIFIC CONTENT (Only include if present in the 'Features' list):
 Auth: Explain authentication usage.
