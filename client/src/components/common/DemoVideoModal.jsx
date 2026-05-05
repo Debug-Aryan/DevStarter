@@ -143,7 +143,7 @@ export default function DemoVideoModal({ isOpen, onClose, videoId, triggerRect }
             {/* Video Container (16:9 Aspect Ratio) */}
             <div className="relative aspect-video w-full bg-black">
               <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+                src="/DevStarter_Final.mp4"
                 title="Demo Video"
                 className="absolute inset-0 w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
